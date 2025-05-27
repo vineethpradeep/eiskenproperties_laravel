@@ -349,6 +349,8 @@ class PropertyController extends Controller
 
     public function ScheduleViewing(Request $request)
     {
+        $viewTime12Hr = $request->view_time;
+        $viewTime24Hr = date("H:i:s", strtotime($viewTime12Hr));
         // Validate request
         $request->validate([
             'property_id' => 'required|exists:properties,id',
@@ -360,12 +362,12 @@ class PropertyController extends Controller
 
         PropertyViewing::create([
             'property_id' => $request->property_id,
-            'user_id' => Auth::id() ?? null,
+            'user_id' => Auth::id() ?? null, // Set user_id to null if not authenticated
             'name' => $request->view_name,
             'email' => $request->view_email,
             'phone' => $request->view_phone,
             'view_date' => $request->view_date,
-            'view_time' => $request->view_time,
+            'view_time' => $viewTime24Hr,
             'message' => $request->view_message,
         ]);
 
@@ -403,7 +405,7 @@ class PropertyController extends Controller
             'name' => $sendMail->name,
             'view_date' => $sendMail->view_date,
             'view_time' => $sendMail->view_time,
-            'property_name' => $sendMail->property->property_name,
+            'property_address' => $sendMail->property->address,
         ];
 
         Mail::to($sendMail->email)->send(new ViewingSchedule($data));

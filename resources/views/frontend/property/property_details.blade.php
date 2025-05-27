@@ -300,7 +300,7 @@
                 </div>
 
                 <div class="bg-white widget-form border rounded">
-                    <h3 class="h4 text-black mb-3">Schuduler a View</h3>
+                    <h3 class="h4 text-black mb-3">Schedule a View</h3>
                     <form id="propertyViewForm" action="{{ route('schedule.viewing') }}" method="POST">
                         @csrf
                         <input type="hidden" name="property_id" value="{{ $property->id }}">
@@ -315,94 +315,109 @@
                                         placeholder="Date"
                                         autocomplete="off"
                                         required />
-                                    <label for="date">Date</label>
+                                    <label for="date">Viewing Date</label>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <div class="form-floating">
-                                    <select name="view_time" id="view_time" class="form-select" required>
-                                        <option value="">Select a time</option>
-                                        @php
-                                        $start = strtotime('09:00');
-                                        $end = strtotime('17:00');
-                                        while ($start <= $end) {
-                                            $time=date('H:i', $start);
-                                            $display=date('g:i A', $start);
-                                            @endphp
-                                            <option value="{{ $time }}">{{ $display }}</option>
-                                            @php
-                                            $start = strtotime('+30 minutes', $start);
-                                            }
-                                            @endphp
-                                    </select>
-                                    <label for="view_time">Viewing Time</label>
-                                </div>
+                                @php
+                                $start = strtotime('09:00');
+                                $end = strtotime('17:00');
+                                $timeSlots = [];
 
-                            </div>
-                            <div class="col-12">
-                                <div class="form-floating">
+                                while ($start <= $end) {
+                                    $timeSlots[]=date('g:i A', $start);
+                                    $start=strtotime('+30 minutes', $start);
+                                    }
+
+                                    $jsonTimeSlots=json_encode($timeSlots);
+                                    @endphp
+
+                                    <div class="form-floating custom-dropdown" data-options='@json($timeSlots)'>
                                     <input
                                         type="text"
-                                        class="form-control"
-                                        id="name"
-                                        name="view_name"
-                                        placeholder="Name"
+                                        name="view_time"
+                                        class="form-control dropdown-input"
+                                        placeholder="Select Viewing Time"
                                         autocomplete="off"
                                         required />
-                                    <label for="name">Name</label>
-                                </div>
+                                    <label for="view_time">Viewing Time</label>
+                                    <span class="dropdown-icon">
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </span>
+                                    <span class="clear-icon">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </span>
+                                    <div class="dropdown-content">
+                                        <ul class="options"></ul>
+                                    </div>
                             </div>
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="email"
-                                        placeholder="Email"
-                                        name="view_email"
-                                        autocomplete="off"
-                                        required />
-                                    <label for="email">Email</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="phone"
-                                        name="view_phone"
-                                        placeholder="Phone Number"
-                                        maxlength="10"
-                                        autocomplete="off"
-                                        required />
-                                    <label for="phone">Phone Number</label>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <textarea
-                                        class="form-control"
-                                        placeholder="Leave a message here"
-                                        id="message"
-                                        name="view_message"
-                                        style="height: 150px"
-                                        autocomplete="off"></textarea>
-                                    <label for="message">Message</label>
-                                </div>
-                            </div>
-                            <div class="col-12 d-flex justify-content-end">
+
+
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
                                 <input
-                                    type="submit"
-                                    class="btn btn-primary"
-                                    value="Request Viewing" />
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    name="view_name"
+                                    placeholder="Name"
+                                    autocomplete="off"
+                                    required />
+                                <label for="name">Name</label>
                             </div>
                         </div>
-                    </form>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="email"
+                                    placeholder="Email"
+                                    name="view_email"
+                                    autocomplete="off"
+                                    required />
+                                <label for="email">Email</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="phone"
+                                    name="view_phone"
+                                    placeholder="Phone Number"
+                                    maxlength="10"
+                                    autocomplete="off"
+                                    required />
+                                <label for="phone">Phone Number</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <textarea
+                                    class="form-control"
+                                    placeholder="Leave a message here"
+                                    id="message"
+                                    name="view_message"
+                                    style="height: 150px"
+                                    autocomplete="off"></textarea>
+                                <label for="message">Message</label>
+                            </div>
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <input
+                                type="submit"
+                                class="btn btn-primary"
+                                value="Request Viewing" />
+                        </div>
                 </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 </div>
 <!-- Call to Action End -->
 

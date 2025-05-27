@@ -32,7 +32,7 @@
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $item->name }}</td>
-                                <td>{{ $item['property']['property_name'] }}</td>
+                                <td>{{ $item['property']['address'] }}</td>
                                 <td>{{ $item->phone }}</td>
                                 <td>{{ $item->email }}</td>
                                 <td>{{ $item->view_date }}</td>

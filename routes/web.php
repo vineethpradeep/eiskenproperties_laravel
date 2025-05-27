@@ -29,6 +29,10 @@ Route::get('/about', function () {
     return view('frontend.about');
 })->name('about');
 
+Route::get('/mail', function () {
+    return view('mail.schedule_confirmed_mail');
+})->name('mail');
+
 Route::get('/contact', function () {
     return view('frontend.contact');
 })->name('contact');

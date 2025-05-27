@@ -98,14 +98,14 @@
         <tbody>
             <tr>
                 <td>
-                    <table class="row row-1" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #FFFFFF;">
+                    <table class="row row-1" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #0f2e50;">
                         <tbody>
                             <tr>
                                 <td>
-                                    <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #000000; width: 500px; margin: 0 auto;" width="500">
+                                    <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; color: #ffffff; background-color: #0f2e50; width: 500px; margin: 0 auto;" width="500">
                                         <tbody>
                                             <tr>
-                                                <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 10px; padding-top: 10px; vertical-align: top;">
+                                                <td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 30px; padding-top: 30px; vertical-align: top;">
                                                     <table class="image_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
                                                         <tr>
                                                             <td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
@@ -118,8 +118,8 @@
                                                     <table class="paragraph_block block-2" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                         <tr>
                                                             <td class="pad">
-                                                                <div style="color:#333d63;font-family:Georgia,Times,'Times New Roman',serif;font-size:24px;line-height:1.2;text-align:center;mso-line-height-alt:29px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">Eisken Properties Ltd</span></p>
+                                                                <div style="color:#ffffff;font-family:Georgia,Times,'Times New Roman',serif;font-size:18px;line-height:1.2;text-align:center;mso-line-height-alt:29px;">
+                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">Swansea Lettings Specialists</span></p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -144,7 +144,7 @@
                                                         <tr>
                                                             <td class="pad">
                                                                 <div style="color:#FFFFFF;font-family:Georgia,Times,'Times New Roman',serif;font-size:14px;line-height:1.2;text-align:center;mso-line-height-alt:17px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">HOUSES&nbsp; -&nbsp; BIG DEALS&nbsp; -&nbsp; ASK AN AGENT</span></p>
+                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">LETTING PROPERTIES &nbsp; -&nbsp; ASK AN AGENT</span></p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -169,16 +169,7 @@
                                                         <tr>
                                                             <td class="pad" style="padding-left:10px;padding-right:10px;padding-top:10px;">
                                                                 <div style="color:#333d63;font-family:Georgia,Times,'Times New Roman',serif;font-size:58px;line-height:1.2;text-align:center;mso-line-height-alt:70px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">BUY / SALE WITH US</span></p>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td class="pad" style="padding-bottom:10px;padding-left:10px;padding-right:10px;">
-                                                                <div style="color:#333d63;font-family:Georgia,Times,'Times New Roman',serif;font-size:14px;line-height:1.2;text-align:center;mso-line-height-alt:17px;">
-                                                                    <p style="margin: 0; word-break: break-word;">YOU WILL PAY ZERO COMMISSION</p>
+                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">BUY / SELL WITH US</span></p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -187,12 +178,12 @@
                                                         <tr>
                                                             <td class="pad">
                                                                 <div class="alignment" align="center"><a href="mailto:enquiries@eiskenp.com?subject=Enquiry" target="_blank" title="enquiries@eiskenp.com" style="color:#ffffff;text-decoration:none;"><!--[if mso]>
-<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"  href="https://eiskenproperties.com"  style="height:42px;width:140px;v-text-anchor:middle;" arcsize="0%" fillcolor="#edac15">
-<v:stroke dashstyle="Solid" weight="0px" color="#edac15"/>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"  href="https://eiskenproperties.com"  style="height:42px;width:140px;v-text-anchor:middle;" arcsize="0%" fillcolor="#0E2E50">
+<v:stroke dashstyle="Solid" weight="0px" color="#0E2E50"/>
 <w:anchorlock/>
 <v:textbox inset="0px,0px,0px,0px">
 <center dir="false" style="color:#ffffff;font-family:sans-serif;font-size:16px">
-<![endif]--><span class="button" style="background-color: #edac15; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 0px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #ffffff; display: inline-block; font-family: Georgia, Times, 'Times New Roman', serif; font-size: 16px; font-weight: undefined; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span style="word-break: break-word; line-height: 32px;">CONTACT US</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]--></a></div>
+<![endif]--><span class="button" style="background-color: #0E2E50; border-bottom: 0px solid transparent; border-left: 0px solid transparent; border-radius: 0px; border-right: 0px solid transparent; border-top: 0px solid transparent; color: #ffffff; display: inline-block; font-family: Georgia, Times, 'Times New Roman', serif; font-size: 16px; font-weight: undefined; mso-border-alt: none; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; padding-right: 20px; text-align: center; width: auto; word-break: keep-all; letter-spacing: normal;"><span style="word-break: break-word; line-height: 32px;">CONTACT US</span></span><!--[if mso]></center></v:textbox></v:roundrect><![endif]--></a></div>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -225,7 +216,7 @@
                                                         <tr>
                                                             <td class="pad" style="padding-bottom:10px;padding-left:10px;padding-right:10px;padding-top:20px;">
                                                                 <div style="color:#7BC0BA;font-family:Georgia,Times,'Times New Roman',serif;font-size:22px;line-height:1.2;text-align:center;mso-line-height-alt:26px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">Dear&nbsp;</span><span style="word-break: break-word; color:#1e0e4b">{{$schedule['name']}}</span></p>
+                                                                    <p style="margin: 0; word-break: break-word;"><span style="word-break: break-word;">Dear&nbsp;</span><span style="word-break: break-word; color:#1e0e4b">{{$schedule['name']'}}</span></p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -234,25 +225,7 @@
                                                         <tr>
                                                             <td class="pad">
                                                                 <div style="color:#555555;font-family:Georgia, Times, 'Times New Roman', serif;font-size:14px;line-height:1.5;text-align:center;mso-line-height-alt:21px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><em>Your Requested is confirmed on this date</em></p>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="paragraph_block block-4" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td class="pad">
-                                                                <div style="color:#555555;font-family:Georgia, Times, 'Times New Roman', serif;font-size:14px;line-height:1.5;text-align:left;mso-line-height-alt:21px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><em><strong>Viewing Date :</strong>&nbsp; {{ $schedule['view_date'] }}</em></p>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                    <table class="paragraph_block block-5" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                                        <tr>
-                                                            <td class="pad">
-                                                                <div style="color:#555555;font-family:Georgia, Times, 'Times New Roman', serif;font-size:14px;line-height:1.5;text-align:left;mso-line-height-alt:21px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><em><strong>Viewing Time :</strong>&nbsp; {{ $schedule['view_time'] }}</em></p>
+                                                                    <p style="margin: 0; word-break: break-word;"><em>Thank you for booking a viewing with Eisken Properties. We are pleased to confirm your appointment.</em></p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -261,16 +234,35 @@
                                                         <tr>
                                                             <td class="pad">
                                                                 <div style="color:#555555;font-family:Georgia, Times, 'Times New Roman', serif;font-size:14px;line-height:1.5;text-align:left;mso-line-height-alt:21px;">
-                                                                    <p style="margin: 0; word-break: break-word;"><em><strong>Property :</strong>&nbsp; {{ $schedule['property_name'] }}</em></p>
+                                                                    <p style="margin: 0; word-break: break-word;"><em><strong>Property Address :</strong>&nbsp; {{ $schedule['property_name']}}</em></p>
                                                                 </div>
                                                             </td>
                                                         </tr>
                                                     </table>
+                                                    <table class="paragraph_block block-4" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad">
+                                                                <div style="color:#555555;font-family:Georgia, Times, 'Times New Roman', serif;font-size:14px;line-height:1.5;text-align:left;mso-line-height-alt:21px;">
+                                                                    <p style="margin: 0; word-break: break-word;"><em><strong>Viewing Date :</strong>&nbsp; {{ $schedule['view_date']}}</em></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="paragraph_block block-5" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                                        <tr>
+                                                            <td class="pad">
+                                                                <div style="color:#555555;font-family:Georgia, Times, 'Times New Roman', serif;font-size:14px;line-height:1.5;text-align:left;mso-line-height-alt:21px;">
+                                                                    <p style="margin: 0; word-break: break-word;"><em><strong>Viewing Time :</strong>&nbsp; {{ $schedule['view_time']}}</em></p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
                                                     <table class="paragraph_block block-7" width="100%" border="0" cellpadding="10" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
                                                         <tr>
                                                             <td class="pad">
                                                                 <div style="color:#555555;font-family:Georgia, Times, 'Times New Roman', serif;font-size:14px;line-height:1.5;text-align:center;mso-line-height-alt:21px;">
-                                                                    <p style="margin: 0; word-break: break-word;">Our agent will be there to walk you through the space and answer any questions you have.</p>
+                                                                    <p style="margin: 0; word-break: break-word;">Please ensure to arrive on time, as we have a number of other appointments booked and would not like to disappoint you. If you unable to attend please could you notify us without delay.<br>Our agent will be available to walk you through the property and answer any questions you may have.</p>
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -306,8 +298,8 @@
                                                                 <!--[if !vml]><!-->
                                                                 <table class="icons-inner" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block; padding-left: 0px; padding-right: 0px;" cellpadding="0" cellspacing="0" role="presentation"><!--<![endif]-->
                                                                     <tr>
-                                                                        <td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px;"><a href="http://www.dotseek.co.uk/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://res.cloudinary.com/eiskenproperties/image/upload/v1748298333/whiyf4orwiufsbiq9zht.jpg" height="auto" width="70" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
-                                                                        <td style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center; line-height: normal;"><a href="http://www.dotseek.co.uk/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Dotseek</a></td>
+                                                                        <td style="vertical-align: middle; text-align: center; padding-top: 5px; padding-bottom: 5px;"><a href="http://www.dotseek.co.uk/" target="_blank" style="text-decoration: none;"><img class="icon" alt="Beefree Logo" src="https://res.cloudinary.com/eiskenproperties/image/upload/v1748298333/whiyf4orwiufsbiq9zht.jpg" height="auto" width="60" align="center" style="display: block; height: auto; margin: 0 auto; border: 0;"></a></td>
+                                                                        <td style="font-family: 'Inter', sans-serif; font-size: 12px; font-weight: undefined; color: #1e0e4b; vertical-align: middle; letter-spacing: undefined; text-align: center; line-height: normal;"><a href="http://www.dotseek.co.uk/" target="_blank" style="color: #1e0e4b; text-decoration: none;">Designed with Dotseek</a></td>
                                                                     </tr>
                                                                 </table>
                                                             </td>

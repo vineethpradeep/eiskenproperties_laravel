@@ -28,7 +28,7 @@
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Property</a>
                         <div class="dropdown-menu rounded m-0">
                             <a href="{{ route('all.property.list') }}" class="dropdown-item">Property List</a>
-                            <a href="/property-agreements.html" class="dropdown-item">Property Agreements</a>
+                            <a href="#" class="dropdown-item">Property Agreements</a>
                         </div>
                     </div>
                     <a href="{{url('/contact')}}" class="nav-item nav-link">Contact</a>

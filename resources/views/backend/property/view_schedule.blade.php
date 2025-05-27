@@ -17,8 +17,8 @@
                                 <td>{{ $schedule->user['name'] ?? 'Null' }}</td>
                             </tr>
                             <tr>
-                                <th>Property Name</th>
-                                <td class="text-primary">{{ $schedule->property['property_name'] }}</td>
+                                <th>Property Address</th>
+                                <td class="text-primary">{{ $schedule->property['address'] }}</td>
                             </tr>
                             <tr>
                                 <th>Viewing User Name</th>
