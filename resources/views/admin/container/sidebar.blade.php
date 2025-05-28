@@ -121,6 +121,14 @@
           <a href="{{route('schedule.request')}}">
             <i class="fas fa-calendar"></i>
             <p>Schedule Request</p>
+            <span class="badge badge-success">{{$pendingCount}}</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{{route('schedule.request')}}">
+            <i class="fas fa-calendar"></i>
+            <p>Enquiry</p>
+            <span class="badge badge-secondary">{{$pendingCount}}</span>
           </a>
         </li>
       </ul>
