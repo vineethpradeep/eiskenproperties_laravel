@@ -24,7 +24,7 @@ class ScheduleConfirmedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Letting Made Simple – Viewing Confirmed with Eisken Properties',
+            subject: 'Viewing Confirmed – Your Property Tour with Eisken is Scheduled',
         );
     }
 

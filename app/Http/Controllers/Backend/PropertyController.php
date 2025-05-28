@@ -416,4 +416,14 @@ class PropertyController extends Controller
         ];
         return redirect()->route('schedule.request')->with($notification);
     }
+
+    public function DeleteSchedule($id)
+    {
+        PropertyViewing::findOrFail($id)->delete();
+        $notification = [
+            'message' => 'Viewing Request Deleted Successfully',
+            'alert-type' => 'success',
+        ];
+        return redirect()->back()->with($notification);
+    }
 }

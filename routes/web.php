@@ -119,3 +119,4 @@ Route::post('/wishlist/toggle/{id}', [WishlistController::class, 'toggle'])
     ->name('wishlist.toggle');
 Route::post('/schedule/viewing', [PropertyController::class, 'ScheduleViewing'])->name('schedule.viewing');
 Route::get('/schedule/request', [PropertyController::class, 'ScheduleRequest'])->name('schedule.request');
+Route::get('/delete/schedule/{id}', [PropertyController::class, 'DeleteSchedule'])->name('delete.schedule');

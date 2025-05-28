@@ -59,6 +59,13 @@ class UserController extends Controller
     //User Logout
     public function UserLogout(Request $request)
     {
+
+        $user = Auth::user();
+        if ($user) {
+            // Update the user's status to 'inactive'
+            $user->status = 'inactive';
+            $user->save();
+        }
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
