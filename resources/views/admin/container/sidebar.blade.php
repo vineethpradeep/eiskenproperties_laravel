@@ -128,7 +128,7 @@
           <a href="{{route('schedule.request')}}">
             <i class="fas fa-calendar"></i>
             <p>Enquiry</p>
-            <span class="badge badge-secondary">{{$pendingCount}}</span>
+            <span class="badge badge-secondary">0</span>
           </a>
         </li>
       </ul>

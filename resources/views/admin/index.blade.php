@@ -17,41 +17,31 @@
   <div class="col-sm-6 col-md-8">
     <div class="row">
       <div class="col-sm-6 col-md-6">
-        <div class="card card-stats card-round">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-icon">
-                <div
-                  class="icon-big text-center icon-secondary bubble-shadow-small">
-                  <i class="far fa-check-circle"></i>
-                </div>
-              </div>
-              <div class="col col-stats ms-3 ms-sm-0">
-                <div class="numbers">
-                  <p class="card-category">Requested Schedule View</p>
-                  <h4 class="card-title">{{$pendingCount}}</h4>
-                </div>
-              </div>
+        <div class="card p-3 mb-3">
+          <div class="d-flex align-items-center">
+            <span class="stamp stamp-md bg-info me-3">
+              <i class="fas fa-user-check"></i>
+            </span>
+            <div>
+              <h5 class="mb-1">
+                <b><a href="#"><small>All Users</small></a></b>
+              </h5>
+              <small class="text-muted">{{$allUserCount}}</small>
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-6 col-md-6">
-        <div class="card card-stats card-round">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-icon">
-                <div
-                  class="icon-big text-center icon-secondary bubble-shadow-small">
-                  <i class="far fa-check-circle"></i>
-                </div>
-              </div>
-              <div class="col col-stats ms-3 ms-sm-0">
-                <div class="numbers">
-                  <p class="card-category">Schedule Accepted</p>
-                  <h4 class="card-title">{{$acceptedView}}</h4>
-                </div>
-              </div>
+        <div class="card p-3 mb-3">
+          <div class="d-flex align-items-center">
+            <span class="stamp stamp-md bg-secondary me-3">
+              <i class="fas fa-envelope"></i>
+            </span>
+            <div>
+              <h5 class="mb-1">
+                <b><a href="#"><small>Enquiry Received</small></a></b>
+              </h5>
+              <small class="text-muted">0</small>
             </div>
           </div>
         </div>
@@ -59,41 +49,31 @@
     </div>
     <div class="row">
       <div class="col-sm-6 col-md-6">
-        <div class="card card-stats card-round">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-icon">
-                <div
-                  class="icon-big text-center icon-success bubble-shadow-small">
-                  <i class="fas fa-users"></i>
-                </div>
-              </div>
-              <div class="col col-stats ms-3 ms-sm-0">
-                <div class="numbers">
-                  <p class="card-category">Enquiry</p>
-                  <h4 class="card-title">0</h4>
-                </div>
-              </div>
+        <div class="card p-3">
+          <div class="d-flex align-items-center">
+            <span class="stamp stamp-md bg-secondary me-3">
+              <i class="far fa-paper-plane"></i>
+            </span>
+            <div>
+              <h5 class="mb-1">
+                <b><a href="#"><small>Scheduled Property Viewings</small></a></b>
+              </h5>
+              <small class="text-muted">{{$pendingCount}} Pending</small>
             </div>
           </div>
         </div>
       </div>
       <div class="col-sm-6 col-md-6">
-        <div class="card card-stats card-round">
-          <div class="card-body">
-            <div class="row align-items-center">
-              <div class="col-icon">
-                <div
-                  class="icon-big text-center icon-info bubble-shadow-small">
-                  <i class="fas fa-user-check"></i>
-                </div>
-              </div>
-              <div class="col col-stats ms-3 ms-sm-0">
-                <div class="numbers">
-                  <p class="card-category">All Users</p>
-                  <h4 class="card-title">{{$allUserCount}}</h4>
-                </div>
-              </div>
+        <div class="card p-3">
+          <div class="d-flex align-items-center">
+            <span class="stamp stamp-md bg-success me-3">
+              <i class="far fa-check-circle"></i>
+            </span>
+            <div>
+              <h5 class="mb-1">
+                <b><a href="#"><small>Viewing Schedule Confirmed</small></a></b>
+              </h5>
+              <small class="text-muted">{{$acceptedView}} Accepted</small>
             </div>
           </div>
         </div>
