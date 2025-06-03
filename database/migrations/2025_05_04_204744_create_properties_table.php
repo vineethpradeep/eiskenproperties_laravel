@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('property_status');
             $table->string('furnishing');
             $table->string('deposit')->nullable();
-            $table->unsignedInteger('rent')->nullable()->change();
+            $table->unsignedInteger('rent')->nullable();
             $table->string('property_thumbnail')->nullable();
             $table->text('description')->nullable();
             $table->string('bedrooms')->nullable();

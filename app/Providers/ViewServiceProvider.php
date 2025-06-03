@@ -9,6 +9,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Property;
+use Illuminate\Support\Facades\Schema;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -25,32 +26,47 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $propertyRequests = PropertyViewing::select('property_id', DB::raw('count(*) as request_count'))
-            ->groupBy('property_id')
-            ->with('property')
-            ->get();
-        $inActiveUser = User::where('status', 'active')->whereIn('role', ['user', 'agent'])->get();
-        $allUserCount = User::whereIn('role', ['user', 'agent'])->count();
-        $requestView = PropertyViewing::with('property', 'user')->latest()->get();
-        $pendingCount = PropertyViewing::where('status', 0)->count();
-        $acceptedView = PropertyViewing::where('status', 1)->count();
-        $todayRequests = PropertyViewing::with('property', 'user')
-            ->whereDate('view_date', Carbon::today())
-            ->latest()
-            ->get();
-        $totalViewingRequests = PropertyViewing::count();
-        $inActiveUserCount = $inActiveUser->count();
-        $activeUsers = User::whereIn('role', ['user', 'agent'])
-            ->where('status', 'active')
-            ->latest()
-            ->take(5)
-            ->get();
-        // $newUsers = User::whereIn('role', ['user', 'agent'])
-        //     ->latest()
-        //     ->take(5)
-        //     ->get();
-        $totalCount = $pendingCount + $inActiveUserCount;
-        // dd($propertyRequests);
+        // Initialize default empty values
+        $requestView = collect();
+        $pendingCount = 0;
+        $inActiveUser = collect();
+        $totalCount = 0;
+        $activeUsers = collect();
+        $allUserCount = 0;
+        $totalViewingRequests = 0;
+        $acceptedView = 0;
+        $todayRequests = collect();
+        $propertyRequests = collect();
+
+        if (
+            Schema::hasTable('property_viewings') &&
+            Schema::hasTable('users') &&
+            Schema::hasTable('properties')
+        ) {
+            $propertyRequests = PropertyViewing::select('property_id', DB::raw('count(*) as request_count'))
+                ->groupBy('property_id')
+                ->with('property')
+                ->get();
+
+            $inActiveUser = User::where('status', 'active')->whereIn('role', ['user', 'agent'])->get();
+            $allUserCount = User::whereIn('role', ['user', 'agent'])->count();
+            $requestView = PropertyViewing::with('property', 'user')->latest()->get();
+            $pendingCount = PropertyViewing::where('status', 0)->count();
+            $acceptedView = PropertyViewing::where('status', 1)->count();
+            $todayRequests = PropertyViewing::with('property', 'user')
+                ->whereDate('view_date', Carbon::today())
+                ->latest()
+                ->get();
+            $totalViewingRequests = PropertyViewing::count();
+            $inActiveUserCount = $inActiveUser->count();
+            $activeUsers = User::whereIn('role', ['user', 'agent'])
+                ->where('status', 'active')
+                ->latest()
+                ->take(5)
+                ->get();
+            $totalCount = $pendingCount + $inActiveUserCount;
+        }
+
         View::share([
             'requestView' => $requestView,
             'pendingCount' => $pendingCount,
@@ -62,7 +78,6 @@ class ViewServiceProvider extends ServiceProvider
             'acceptedView' => $acceptedView,
             'todayRequests' => $todayRequests,
             'propertyRequests' => $propertyRequests,
-            // 'newUsers' => $newUsers
         ]);
     }
 }
