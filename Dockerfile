@@ -24,9 +24,9 @@ RUN composer install --no-dev --optimize-autoloader \
     && chmod -R 755 /var/www/storage
 
 # Copy and make start.sh executable
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+COPY start.sh start.sh
+RUN chmod +x start.sh
 
 EXPOSE 80
 
-CMD ["/start.sh"]
+CMD ["start.sh"]
