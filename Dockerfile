@@ -9,19 +9,25 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
+# Set environment variable for Composer root permissions
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 # Set working directory
 WORKDIR /var/www
 
 # Copy application files
 COPY . .
 
-# Copy Nginx configuration
-COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+# Create SQLite file (prevent artisan error)
+RUN touch database/database.sqlite
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader \
     && chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
+
+# Copy Nginx configuration
+COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
 # Copy and make start.sh executable
 COPY start.sh /start.sh
