@@ -7,24 +7,23 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 
 # Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Copy nginx config
-COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # Set working directory
 WORKDIR /var/www
 
+# Copy application files
 COPY . .
 
-# Install PHP dependencies
-RUN composer install
+# Copy Nginx configuration
+COPY ./docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www \
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader \
+    && chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
 
-# Copy start script
+# Copy and make start.sh executable
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
