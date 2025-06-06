@@ -99,53 +99,6 @@
     </script>
     @endif
     <script type="text/javascript">
-        // function toggleWishlist(element) {
-        //     const propertyId = element.getAttribute('data-id');
-        //     const icon = element.querySelector('i');
-
-        //     fetch(`/wishlist/toggle/${propertyId}`, {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        //             },
-        //             credentials: 'same-origin',
-        //             body: JSON.stringify({})
-        //         })
-        //         .then(response => {
-        //             if (response.status === 401) {
-        //                 console.log('Unauthenticated');
-        //                 Swal.fire({
-        //                     icon: 'warning',
-        //                     title: 'Login Required',
-        //                     text: 'Please login to use wishlist!',
-        //                     confirmButtonText: 'OK'
-        //                 });
-        //                 throw new Error('Unauthenticated');
-        //             }
-
-        //             return response.json();
-        //         })
-        //         .then(data => {
-        //             if (data.status === 'added') {
-        //                 icon.classList.remove('text-muted');
-        //                 icon.classList.add('text-danger');
-        //             } else if (data.status === 'removed') {
-        //                 icon.classList.remove('text-danger');
-        //                 icon.classList.add('text-muted');
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('Error:', error);
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: 'Oops...',
-        //                 text: 'Something went wrong: ' + error.message,
-        //                 confirmButtonText: 'OK'
-        //             });
-        //         });
-        // }
-
         function toggleWishlist(element) {
             const propertyId = element.getAttribute('data-id');
             const icon = element.querySelector('i');
