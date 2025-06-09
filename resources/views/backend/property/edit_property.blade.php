@@ -104,6 +104,31 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-12 col-md-6 col-lg-6 mb-3">
+                                <div class="form-group">
+                                    <label class="form-label d-block">Property Features</label>
+                                    <div class="selectgroup selectgroup-pills scrollable-box">
+                                        @php
+                                        $selectedFeatures = old('featured', $property->featured ?? []);
+                                        if (is_string($selectedFeatures)) {
+                                        $selectedFeatures = explode(',', $selectedFeatures);
+                                        }
+                                        @endphp
+
+                                        @foreach(['garage', 'pool', 'garden', 'car_parking', 'bike_parking'] as $feature)
+                                        <label class="selectgroup-item">
+                                            <input
+                                                type="checkbox"
+                                                name="featured[]"
+                                                value="{{ $feature }}"
+                                                class="selectgroup-input"
+                                                {{ in_array($feature, $selectedFeatures) ? 'checked' : '' }} />
+                                            <span class="selectgroup-button">{{ ucfirst(str_replace('_', ' ', $feature)) }}</span>
+                                        </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="row row-card-no-pd mt--2">
                             <div class="col-12 col-md-4 col-lg-4 mb-3">
@@ -213,7 +238,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row row-card-no-pd mt--2">
+                        <!-- <div class="row row-card-no-pd mt--2">
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <div class="form-group">
                                     <label class="form-label d-block">Property Features</label>
@@ -248,7 +273,7 @@
                                         class="form-control"
                                         name="property_video"
                                         value="{{ $property->property_video }}"
-                                        id="property_video" />
+                                        id="property_video" disabled />
 
                                 </div>
                             </div>
@@ -258,7 +283,7 @@
                                     <label for="neighborhood">Neighborhood</label>
                                     <select
                                         class="form-select form-control"
-                                        id="neighborhood" name="neighborhood">
+                                        id="neighborhood" name="neighborhood" disabled>
                                         <option value="" disabled {{ $property->neighborhood == '' ? 'selected' : '' }}>Choose...</option>
                                         <option value="downtown" {{ $property->neighborhood == 'downtown' ? 'selected' : '' }}>Downtown</option>
                                         <option value="suburbia" {{ $property->neighborhood == 'suburbia' ? 'selected' : '' }}>Suburbia</option>
@@ -269,7 +294,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="row row-card-no-pd mt--2">
                             <div class="card">

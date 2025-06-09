@@ -636,7 +636,7 @@
                     required: true,
                 },
                 deposit: {
-                    required: true,
+                    required: false,
                 },
                 property_thumbnail: {
                     required: function(element) {
@@ -655,7 +655,7 @@
                     required: true
                 },
                 floors: {
-                    required: true
+                    required: false
                 },
                 property_size: {
                     required: true
