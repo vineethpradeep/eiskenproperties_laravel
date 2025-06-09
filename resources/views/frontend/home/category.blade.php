@@ -27,7 +27,7 @@ $PropertyType = App\Models\PropertyType::latest()->limit(4)->get();
                     href="">
                     <div class="rounded p-4">
                         <div class="icon mb-3">
-                            <i class="fa-solid {{$item->property_icon}}"></i>
+                            <i class="fa-solid {{$item->property_icon ?? 'fa-building'}}"></i>
                         </div>
                         <h6>{{$item->property_type_name}}</h6>
                         <span>{{count($property)}} Properties</span>

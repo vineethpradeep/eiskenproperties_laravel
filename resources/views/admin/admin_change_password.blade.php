@@ -51,7 +51,7 @@
                         </a>
                     </div>
                     <div class="view-profile">
-                        <a href="#" class="btn btn-secondary w-100">Logout</a>
+                        <a href="{{route('admin.logout')}}" class="btn btn-secondary w-100">Logout</a>
                     </div>
                 </div>
                 <div class="card-footer">

@@ -302,7 +302,7 @@
                                         type="file"
                                         class="form-control"
                                         name="property_video"
-                                        id="property_video" />
+                                        id="property_video" disabled />
 
                                 </div>
                             </div>
@@ -312,7 +312,7 @@
                                     <label for="neighborhood">Neighborhood</label>
                                     <select
                                         class="form-select form-control"
-                                        id="neighborhood">
+                                        id="neighborhood" disabled>
                                         <option value="downtown">Downtown</option>
                                         <option value="suburbia">Suburbia</option>
                                         <option value="uptown">Uptown</option>

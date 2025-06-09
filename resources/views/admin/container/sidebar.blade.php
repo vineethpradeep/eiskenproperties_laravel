@@ -103,7 +103,7 @@
         </li>
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#userList">
-            <i class="fas fa-th-list"></i>
+            <i class="fas fa-users"></i>
             <p>User</p>
             <span class="caret"></span>
           </a>
@@ -126,7 +126,7 @@
         </li>
         <li class="nav-item">
           <a href="{{route('schedule.request')}}">
-            <i class="fas fa-calendar"></i>
+            <i class="fas fa-user-edit"></i>
             <p>Enquiry</p>
             <span class="badge badge-secondary">0</span>
           </a>

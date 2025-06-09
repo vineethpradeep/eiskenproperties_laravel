@@ -50,7 +50,7 @@
                                  <div class="icon me-3" style="width: 45px; height: 45px">
                                      <i class="fa fa-phone-alt text-primary"></i>
                                  </div>
-                                 <span>+012 345 6789</span>
+                                 <span>+44 1792 644023</span>
                              </div>
                          </div>
                      </div>
