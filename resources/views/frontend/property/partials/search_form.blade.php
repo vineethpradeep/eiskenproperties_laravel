@@ -226,18 +226,17 @@
                 </div>
 
                 @if (!empty($showMoreFilters) && $showMoreFilters)
-                <div class="col-12 d-flex justify-content-between align-items-end mt-4">
-                    <div class="more-filter">
+                <div class="col-12 d-flex flex-column flex-md-row justify-content-between align-items-stretch gap-2 mt-4">
+                    <div class="more-filter w-100 w-md-auto text-md-start text-center">
                         <a href="#">+ More filters</a>
                     </div>
-                    <div class="form-group mb-0">
-                        <button
-                            type="submit"
-                            class="btn btn-primary">
+                    <div class="form-group mb-0 w-100 w-md-auto">
+                        <button type="submit" class="btn btn-primary w-100 w-md-auto">
                             Search
                         </button>
                     </div>
                 </div>
+
                 @else
                 <div class="col-12 mt-4">
                     <div class="form-group mb-0">

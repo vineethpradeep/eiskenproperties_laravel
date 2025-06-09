@@ -1,12 +1,12 @@
 <!--hero section start-->
 <div class="videoTourContainer">
     <div class="videoTour">
-        <video autoplay muted loop>
+        <video autoplay muted loop playsinline class="video-bg">
             <source src="{{asset('frontend/assets/img/coverr-tour.mp4')}}" type="video/mp4" />
             Your browser does not support the video tag.
         </video>
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row info-container-wrapper">
+            <div class="col-md-12 d-flex justify-content-center flex-column align-items-center">
                 <div class="overlay"></div>
                 <div class="highLight container-xxl">
                     <div class="bg">

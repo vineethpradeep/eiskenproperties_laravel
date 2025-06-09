@@ -60,34 +60,44 @@ body {
     align-items: center;
     flex-direction: column;
     width: 100%;
+    position: relative;
 }
 
 .videoTour {
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    /* height: 820px; */
-    position: relative;
-    /* transform: translate(0, -4rem); */
+    height: auto;
+    min-height: 100vh;
     transform: translate(0, -4rem) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1);
 }
 
-video {
-    object-fit: cover;
+.video-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.info-container-wrapper {
+    height: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .highLight {
-    position: absolute;
     inset: 0px;
     display: flex;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: 6rem;
     flex-direction: column;
 }
 
 .highLight .bg {
-    /* width: 60%; */
     background-color: rgba(31, 41, 55, 0.6);
     padding: 2rem;
     border-radius: 0.25rem;
@@ -526,12 +536,12 @@ video {
 }
 
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .videoTour {
         height: 100vh;
         transform: none;
     }
-}
+} */
 
 /* @media ((min-width: 1400px)) {
     
@@ -592,7 +602,7 @@ video {
     font-size: 14px;
     font-weight: 500;
     text-transform: uppercase;
-    line-height: 12px;
+    /* line-height: 12px; */
     letter-spacing: 1.4px;
 }
 
@@ -640,14 +650,12 @@ video {
 }
 
 .jumbotron-infobar {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     background: linear-gradient(transparent, #000);
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: auto;
+    width: 100%;
 }
 
 .overlay {
@@ -657,9 +665,6 @@ video {
     right: 0;
     height: 200px;
     background: linear-gradient(to bottom, #000, transparent);
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .jumbotron-infobar::before {
@@ -683,6 +688,7 @@ video {
     padding: 12px;
     border-bottom: 1px solid rgba(250, 250, 250, 0.15);
 }
+
 
 /* .jumbotron-infobar .widget .info-box:last-child {
     border-right: none;
@@ -728,6 +734,7 @@ video {
         border-bottom: none;
         border-right: 1px solid rgba(250, 250, 250, 0.15);
     }
+
 
     .highLight {
         margin-top: 16rem;
@@ -1358,13 +1365,18 @@ video {
     }
 
     .videoTourContainer .videoTour {
-        height: 800px;
+        min-height: 100%;
+        height: auto;
     }
 
     .jumbotron-infobar .widget .info-box {
         padding: 24px;
         border-right: 1px solid rgba(250, 250, 250, .15);
     }
+
+    /* .jumbotron-infobar .widget .info-box:last-child {
+        border-right: none;
+    } */
 
     .back-to-top {
         display: none;
