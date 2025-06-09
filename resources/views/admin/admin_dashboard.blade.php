@@ -9,7 +9,7 @@
         name="viewport" />
     <link
         rel="icon"
-        href="{{asset('assets/img/kaiadmin/favicon.ico')}}"
+        href="{{asset('assets/img/eiskenadmin/favicon.ico')}}"
         type="image/x-icon" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.css" rel="stylesheet">
 
@@ -39,7 +39,7 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/plugins.min.css')}}" />
-    <link rel="stylesheet" href="{{asset('assets/css/kaiadmin.min.css')}}" />
+    <link rel="stylesheet" href="{{asset('assets/css/eiskenadmin.min.css')}}" />
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{asset('assets/css/demo.css')}}" />
@@ -107,8 +107,8 @@
     <!-- Sweet Alert -->
     <script src="{{asset('assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
 
-    <!-- kaiadmin JS -->
-    <script src="{{asset('assets/js/kaiadmin.min.js')}}"></script>
+    <!-- eiskenadmin JS -->
+    <script src="{{asset('assets/js/eiskenadmin.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{asset('assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-bs4.min.js"></script>

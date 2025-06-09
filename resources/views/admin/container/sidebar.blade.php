@@ -7,7 +7,7 @@
           src="{{asset('assets/img/logo.svg')}}"
           alt="navbar brand"
           class="navbar-brand"
-          height="20" />
+          height="28" />
       </a>
       <div class="nav-toggle">
         <button class="btn btn-toggle toggle-sidebar">

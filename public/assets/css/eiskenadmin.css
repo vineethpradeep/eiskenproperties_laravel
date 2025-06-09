@@ -1,7 +1,7 @@
 /*!
 
  =========================================================
- * kaiadmin Bootstrap 5 Admin Dashboard (Bootstrap 5)
+ * eiskenadmin Bootstrap 5 Admin Dashboard (Bootstrap 5)
  =========================================================
 
  * Product Page: http://www.themekita.com/
@@ -2649,8 +2649,8 @@ body[data-background-color="dark"] .border-top {
   display: inline;
   width: auto;
   border-left: 1px solid #efefef;
-  margin-left: 25px;
-  padding-left: 25px;
+  /* margin-left: 25px; */
+  padding-left: 0;
   margin-bottom: 0px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -10866,4 +10866,4 @@ body[data-background-color="dark2"] .jvm-zoom-btn {
   }
 }
 
-/*# sourceMappingURL=kaiadmin.css.map */
+/*# sourceMappingURL=eiskenadmin.css.map */
