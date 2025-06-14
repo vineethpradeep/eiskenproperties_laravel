@@ -41,7 +41,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
@@ -59,6 +59,22 @@ return [
             'throw' => false,
             'report' => false,
         ],
+
+        'supabase' => [
+            'driver'   => 's3',
+            'url'      => env('SUPABASE_URL'),
+            'service_key' => env('SUPABASE_SERVICE_ROLE_API_KEY'),
+            'key'      => env('SUPABASE_SECRET_S3_ACCESS_KEY_ID'),
+            'secret'   => env('SUPABASE_STORAGE_S3_SECRET_ACCESS_KEY'),
+            'region'   => env('SUPABASE_STORAGE_REGION'),
+            'bucket'   => env('SUPABASE_STORAGE_BUCKET'),
+            'endpoint' => env('SUPABASE_STORAGE_S3_CONNECTION_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            'defaultUrlGeneration' => null,
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ]
 
     ],
 

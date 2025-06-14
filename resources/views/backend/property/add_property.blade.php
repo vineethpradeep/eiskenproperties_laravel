@@ -644,9 +644,10 @@
                     }
                 },
                 'multiple_image[]': {
-                    required: function(element) {
-                        return $('#multiImageInput').get(0).files.length === 0;
-                    }
+                    // required: function(element) {
+                    //     return $('#multiImageInput').get(0).files.length === 0;
+                    // }
+                    required: false
                 },
                 bedrooms: {
                     required: true

@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\PropertyTypeController;
 use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\WishlistController;
+use App\Http\Controllers\Backend\SupabaseUploadController;
 use App\Http\Middleware\Role;
 use App\Models\Property;
 use App\Models\User;
@@ -36,7 +37,6 @@ Route::get('/mail', function () {
 Route::get('/contact', function () {
     return view('frontend.contact');
 })->name('contact');
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/user/profile', [UserController::class, 'UserProfile'])->name('user.profile');

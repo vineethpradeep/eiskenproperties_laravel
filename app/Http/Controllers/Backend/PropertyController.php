@@ -17,6 +17,10 @@ use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ScheduleConfirmedMail as ViewingSchedule;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Illuminate\Http\File;
 
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\AssignOp\Mul;
@@ -43,15 +47,32 @@ class PropertyController extends Controller
 
         $amenitiesId = $request->amenities_id;
         $amenities = implode(',', $amenitiesId);
-        // dd($amenities);
-
         $pcode = IdGenerator::generate(['table' => 'properties', 'field' => 'property_code', 'length' => 6, 'prefix' => 'EP-']);
+        $file = $request->file('property_thumbnail');
+        $path = 'thumbnail/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
 
+        $baseUrl = rtrim(config('filesystems.disks.supabase.url'), '/');
+        if (empty($baseUrl)) {
+            throw new \Exception("SUPABASE_URL is not set. Check your .env file.");
+        }
 
-        $image = $request->file('property_thumbnail');
-        $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-        Image::read($image)->resize(408, 272)->save(public_path('upload/property/thumbnail/' . $name_gen));
-        $save_url = 'upload/property/thumbnail/' . $name_gen;
+        $bucket = config('filesystems.disks.supabase.bucket');
+        if (empty($bucket)) {
+            throw new \Exception("Supabase bucket is not configured. Check config/filesystems.php.");
+        }
+
+        $uploadUrl = $baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+            'Content-Type'  => $file->getMimeType(),
+        ])->withBody(
+            file_get_contents($file),
+            $file->getMimeType()
+        )->put($uploadUrl);
+
+        $saveUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+
 
         $property_id = Property::insertGetId([
             'ptype_id' => $request->ptype_id,
@@ -91,23 +112,37 @@ class PropertyController extends Controller
             'hot' => $request->hot,
             'status' => 1,
             'agent_id' => $request->agent_id,
-            'property_thumbnail' => $save_url,
+            'property_thumbnail' => $saveUrl,
             'created_at' => Carbon::now(),
         ]);
 
         // Multi Image Upload
-        $images = $request->file('multiple_image');
-        foreach ($images as $img) {
-            $multi_name_gen = hexdec(uniqid()) . '.' . $img->getClientOriginalExtension();
-            Image::read($img)->resize(408, 272)->save('upload/property/multi-image/' . $multi_name_gen);
-            $multi_save_url = 'upload/property/multi-image/' . $multi_name_gen;
+        foreach ($request->file('multiple_image') as $img) {
+            $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
 
-            MultiImage::insert([
-                'property_id' => $property_id,
-                'image' => $multi_save_url,
-                'created_at' => Carbon::now(),
-            ]);
+            $uploadUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/' .
+                trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+                'Content-Type' => $img->getMimeType(),
+            ])->withBody(
+                file_get_contents($img),
+                $img->getMimeType()
+            )->put($uploadUrl);
+
+            if ($response->successful()) {
+                $publicUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/public/' .
+                    trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+
+                MultiImage::insert([
+                    'property_id' => $property_id,
+                    'image' => $publicUrl,
+                    'created_at' => now(),
+                ]);
+            }
         }
+
 
         return redirect()->route('all.property')->with('success', 'Property Added Successfully');
     }
@@ -193,33 +228,57 @@ class PropertyController extends Controller
         ]);
 
         $pro_id = $request->id;
-        $oldImage = $request->old_property_thumbnail_image;
+        $oldImageUrl = $request->old_property_thumbnail_image;
 
         $image = $request->file('property_thumbnail');
-        $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-        Image::read($image)->resize(408, 272)->save(public_path('upload/property/thumbnail/' . $name_gen));
-        $save_url = 'upload/property/thumbnail/' . $name_gen;
+        $path = 'thumbnail/' . Str::uuid() . '.' . $image->getClientOriginalExtension();
 
-        if (file_exists($oldImage)) {
-            @unlink($oldImage);
+        $baseUrl = rtrim(config('filesystems.disks.supabase.url'), '/');
+        $bucket = config('filesystems.disks.supabase.bucket');
+        $uploadUrl = $baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+            'Content-Type'  => $image->getMimeType(),
+        ])->withBody(
+            file_get_contents($image),
+            $image->getMimeType()
+        )->put($uploadUrl);
+
+        if ($response->successful()) {
+            // Delete old image from Supabase (optional but cleaner)
+            if (!empty($oldImageUrl)) {
+                $oldPath = ltrim(str_replace("/storage/v1/object/public/{$bucket}/", '', parse_url($oldImageUrl, PHP_URL_PATH)), '/');
+
+                Http::withHeaders([
+                    'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+                    'Content-Type' => 'application/json',
+                ])->delete($baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . $oldPath);
+            }
+
+            $save_url = $baseUrl . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+
+            Property::findOrFail($pro_id)->update([
+                'property_thumbnail' => $save_url,
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->back()->with([
+                'message' => 'Property Thumbnail Updated Successfully',
+                'alert-type' => 'success',
+            ]);
         }
 
-        Property::findOrFail($pro_id)->update([
-            'property_thumbnail' => $save_url,
-            'updated_at' => now(),
+        return redirect()->back()->with([
+            'message' => 'Thumbnail upload failed',
+            'alert-type' => 'error',
         ]);
-
-        $notification = [
-            'message' => 'Property Thumbnail Updated Successfully',
-            'alert-type' => 'success',
-        ];
-
-        return redirect()->back()->with($notification);
     }
+
 
     public function UpdatePropertyMultiImage(Request $request)
     {
-        $multiImages = $request->multiple_image; // This is now an associative array with image_id as key
+        $multiImages = $request->multiple_image;
 
         if (!is_array($multiImages)) {
             return back()->with('error', 'No images selected.');
@@ -228,37 +287,68 @@ class PropertyController extends Controller
         foreach ($multiImages as $id => $image) {
             $existingImage = MultiImage::findOrFail($id);
 
-            // Delete old image file
-            if (file_exists(public_path($existingImage->image))) {
-                unlink(public_path($existingImage->image));
+            // Build and delete the old file from Supabase
+            $oldImageUrl = $existingImage->image;
+            $bucket = config('filesystems.disks.supabase.bucket');
+            $baseUrl = rtrim(config('filesystems.disks.supabase.url'), '/');
+
+            if (!empty($oldImageUrl)) {
+                $oldPath = ltrim(str_replace("/storage/v1/object/public/{$bucket}/", '', parse_url($oldImageUrl, PHP_URL_PATH)), '/');
+
+                Http::withHeaders([
+                    'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+                    'Content-Type' => 'application/json',
+                ])->delete($baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . $oldPath);
             }
 
-            // Save new image
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            Image::read($image)->resize(408, 272)->save(public_path('upload/property/multi-image/' . $name_gen));
-            $save_url = 'upload/property/multi-image/' . $name_gen;
+            // Upload the new image
+            $path = 'multi-image/' . Str::uuid() . '.' . $image->getClientOriginalExtension();
+            $uploadUrl = $baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . ltrim($path, '/');
 
-            // Update DB
-            $existingImage->update([
-                'image' => $save_url,
-                'updated_at' => now(),
-            ]);
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+                'Content-Type' => $image->getMimeType(),
+            ])->withBody(
+                file_get_contents($image),
+                $image->getMimeType()
+            )->put($uploadUrl);
+
+            if ($response->successful()) {
+                $publicUrl = $baseUrl . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+
+                $existingImage->update([
+                    'image' => $publicUrl,
+                    'updated_at' => now(),
+                ]);
+            }
         }
 
-        $notification = [
+        return redirect()->back()->with([
             'message' => 'Property Multi-Image Updated Successfully',
             'alert-type' => 'success',
-        ];
-
-        return redirect()->back()->with($notification);
+        ]);
     }
+
 
     public function PropertyMultiImageDelete($id)
     {
         $multiImage = MultiImage::findOrFail($id);
-        if (file_exists(public_path($multiImage->image))) {
-            unlink(public_path($multiImage->image));
-        }
+
+        // Extract file path relative to bucket
+        $publicUrl = $multiImage->image;
+        $urlParts = parse_url($publicUrl);
+        $path = ltrim(str_replace('/storage/v1/object/public/' . config('filesystems.disks.supabase.bucket') . '/', '', $urlParts['path'] ?? ''), '/');
+
+        // Send DELETE request to Supabase
+        $deleteResponse = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+            'Content-Type' => 'application/json',
+        ])->delete(
+            rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/' .
+                trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . $path
+        );
+
+        // Delete from database regardless of Supabase success
         $multiImage->delete();
 
         $notification = [
@@ -271,27 +361,31 @@ class PropertyController extends Controller
 
     public function StoreNewMultiImage(Request $request)
     {
-        $newMultiImageId = $request->new_multi_image;
-
-        if (!$request->hasFile('multiple_image')) {
-            return back()->with('error', 'No image file uploaded.');
-        }
-
         $image = $request->file('multiple_image');
 
-        if (!$image->isValid()) {
-            return back()->with('error', 'Uploaded image is not valid.');
+        $path = 'multi-image/' . Str::uuid() . '.' . $image->getClientOriginalExtension();
+
+        $uploadUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/' .
+            trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+            'Content-Type' => $image->getMimeType(),
+        ])->withBody(
+            file_get_contents($image),
+            $image->getMimeType()
+        )->put($uploadUrl);
+
+        if ($response->successful()) {
+            $publicUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/public/' .
+                trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+
+            MultiImage::insert([
+                'property_id' => $request->new_multi_image,
+                'image' => $publicUrl,
+                'created_at' => now(),
+            ]);
         }
-
-        $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-        Image::read($image)->resize(408, 272)->save(public_path('upload/property/multi-image/' . $name_gen));
-        $save_url = 'upload/property/multi-image/' . $name_gen;
-
-        MultiImage::insert([
-            'property_id' => $newMultiImageId,
-            'image' => $save_url,
-            'created_at' => now(),
-        ]);
 
         $notification = [
             'message' => 'Property Multi-Image Added Successfully',
