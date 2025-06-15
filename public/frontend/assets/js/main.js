@@ -123,37 +123,36 @@
     );
 
     $(document).ready(function () {
-        const $track = $(".slider-track");
-        const $thumbnails = $(".smallImages img");
-        let currentIndex = 0;
-        let slideInterval;
         const itemsPerPage = 4;
         const $items = $("#property-container .property-item-wrap");
         const totalItems = $items.length;
         const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-        $thumbnails.each(function () {
-            const src = $(this).attr("src");
-            $track.append(
-                `<div class="slide" style="background-image: url('${src}')"></div>`
-            );
-        });
+        const $bigImage = $(".bigImage img");
+        const $thumbnails = $(".smallImages img");
+        const defaultBigImage =
+            "https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_image.jpg";
+        const defaultSmallImage =
+            "https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg";
+        let currentIndex = 0;
+        let slideInterval;
 
         function updateSlider(index) {
-            const translateX = -index * 100;
-            $track.css("transform", `translateX(${translateX}%)`);
+            if (index < 0) index = $thumbnails.length - 1;
+            if (index >= $thumbnails.length) index = 0;
+
+            // Get new image source or default
+            const newSrc = $thumbnails.eq(index).attr("src") || defaultBigImage;
+            $bigImage.attr("src", newSrc);
+
             currentIndex = index;
         }
 
         function nextSlide() {
-            currentIndex = (currentIndex + 1) % $thumbnails.length;
-            updateSlider(currentIndex);
+            updateSlider(currentIndex + 1);
         }
 
         function prevSlide() {
-            currentIndex =
-                (currentIndex - 1 + $thumbnails.length) % $thumbnails.length;
-            updateSlider(currentIndex);
+            updateSlider(currentIndex - 1);
         }
 
         function startAutoSlide() {
@@ -181,6 +180,7 @@
             resetAutoSlide();
         });
 
+        // Initialize first image and start auto-slide
         updateSlider(currentIndex);
         startAutoSlide();
 

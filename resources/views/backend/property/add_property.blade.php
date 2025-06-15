@@ -643,13 +643,13 @@
                 property_thumbnail: {
                     required: function() {
                         let existingImage = $('#existing_image').val().trim();
-                        return existingImage === '' ? false : $('#property_thumbnail').get(0).files.length === 0;
+                        return existingImage !== '' || $('#property_thumbnail').get(0).files.length > 0;
                     }
                 },
                 'multiple_image[]': {
                     required: function() {
                         let existingImages = $('#existing_multi_images').val().trim();
-                        return existingImages === '' ? false : $('#multiImageInput').get(0).files.length === 0;
+                        return existingImages !== '' || $('#multiImageInput').get(0).files.length > 0;
                     }
                 },
                 bedrooms: {

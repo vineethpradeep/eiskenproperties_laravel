@@ -40,6 +40,7 @@ class ViewServiceProvider extends ServiceProvider
         $propertyRequests = collect();
         $totalEnquiries = 0;
         $pendingEnquiries = 0;
+        $contactsData = collect();
 
         if (
             Schema::hasTable('property_viewings') ||

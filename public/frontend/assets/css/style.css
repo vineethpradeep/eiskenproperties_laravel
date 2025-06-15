@@ -824,6 +824,12 @@ body {
     position: relative;
 }
 
+.property-item .img-fluid {
+    width: 408px;
+    height: 272px;
+    object-fit: cover;
+}
+
 .fav-type {
     margin-top: -24px;
     position: absolute;

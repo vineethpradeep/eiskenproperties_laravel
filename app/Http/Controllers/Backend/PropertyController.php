@@ -49,10 +49,10 @@ class PropertyController extends Controller
         $amenities = implode(',', $amenitiesId);
         $pcode = IdGenerator::generate(['table' => 'properties', 'field' => 'property_code', 'length' => 6, 'prefix' => 'EP-']);
         $file = $request->file('property_thumbnail');
+        $saveUrl = null;
 
         if ($file) {
             $path = 'thumbnail/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
-
             $baseUrl = rtrim(config('filesystems.disks.supabase.url'), '/');
             $bucket = config('filesystems.disks.supabase.bucket');
             $uploadUrl = $baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . ltrim($path, '/');
@@ -64,11 +64,10 @@ class PropertyController extends Controller
                 file_get_contents($file),
                 $file->getMimeType()
             )->put($uploadUrl);
-            $saveUrl = $response->successful()
-                ? $baseUrl . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/')
-                : null;
-        } else {
-            $saveUrl = null;
+
+            if ($response->successful()) {
+                $saveUrl = $baseUrl . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+            }
         }
 
         $property_id = Property::insertGetId([
@@ -113,27 +112,30 @@ class PropertyController extends Controller
             'created_at' => Carbon::now(),
         ]);
 
-        // Multi Image Upload
+        // Multi-Image Upload
         $uploadedImages = [];
 
         if ($request->hasFile('multiple_image')) {
             foreach ($request->file('multiple_image') as $img) {
-                $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
+                try {
+                    $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
+                    $baseUrl = rtrim(config('filesystems.disks.supabase.url'), '/');
+                    $bucket = config('filesystems.disks.supabase.bucket');
+                    $uploadUrl = $baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . ltrim($path, '/');
 
-                $uploadUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/' .
-                    trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+                    $response = Http::withHeaders([
+                        'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+                        'Content-Type' => $img->getMimeType(),
+                    ])->withBody(
+                        file_get_contents($img),
+                        $img->getMimeType()
+                    )->put($uploadUrl);
 
-                $response = Http::withHeaders([
-                    'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
-                    'Content-Type' => $img->getMimeType(),
-                ])->withBody(
-                    file_get_contents($img),
-                    $img->getMimeType()
-                )->put($uploadUrl);
-
-                if ($response->successful()) {
-                    $uploadedImages[] = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/public/' .
-                        trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+                    if ($response->successful()) {
+                        $uploadedImages[] = $baseUrl . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('Failed to upload image: ' . $e->getMessage());
                 }
             }
         }
@@ -142,18 +144,22 @@ class PropertyController extends Controller
             $uploadedImages = [null];
         }
 
-        foreach ($uploadedImages as $imageUrl) {
-            MultiImage::insert([
-                'property_id' => $property_id,
-                'image' => $imageUrl,
-                'created_at' => now(),
-            ]);
+        if (!empty($uploadedImages) && $uploadedImages !== [null]) {
+            foreach ($uploadedImages as $imageUrl) {
+                MultiImage::create([
+                    'property_id' => $property_id,
+                    'image' => $imageUrl,
+                    'created_at' => now(),
+                ]);
+            }
         }
 
         $notification = [
             'message' => 'Property Added Successfully',
             'alert-type' => 'success',
         ];
+
+        return redirect()->route('all.property')->with($notification);
 
 
         return redirect()->route('all.property')->with($notification);

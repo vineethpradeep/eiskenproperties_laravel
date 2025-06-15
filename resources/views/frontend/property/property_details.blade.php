@@ -19,10 +19,7 @@
                             <div class="arrow arrow-left">
                                 <i class="fas fa-chevron-left"></i>
                             </div>
-                            <!-- <img
-                      alt=""
-                      src="https://res.cloudinary.com/eiskenproperties/image/upload/v1738520480/posts/interior_7_lsygfq.jpg"
-                    /> -->
+                            <img alt="{{ $property->property_name }}" src="{{ $property->property_thumbnail ?? 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_image.jpg' }}" />
                             <div class="slider-wrapper">
                                 <div class="slider-track"></div>
                             </div>
@@ -31,17 +28,14 @@
                             </div>
                         </div>
                         <div class="smallImages">
+                            @if($multiImage->isNotEmpty())
                             @foreach($multiImage as $image)
-                            <img
-                                alt="{{$property->property_name}}"
-                                src="{{asset($image->image ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg')}}" />
+                            <img alt="{{ $property->property_name }}" src="{{ $image->image }}" />
                             @endforeach
-                            <!-- <img
-                                alt=""
-                                src="https://res.cloudinary.com/eiskenproperties/image/upload/v1738520484/posts/interior_10_zmeidt.jpg" />
-                            <img
-                                alt=""
-                                src="https://res.cloudinary.com/eiskenproperties/image/upload/v1738520486/posts/interior_9_ojwdcr.jpg" /> -->
+                            @else
+                            <img alt="{{ $property->property_name }}" src="https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg" />
+                            @endif
+
                         </div>
                     </div>
                 </div>
