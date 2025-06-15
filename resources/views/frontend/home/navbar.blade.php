@@ -44,14 +44,17 @@
                             style="width: 45px; height: 45px; object-fit: cover; border-radius: 50%;" />
                         @else
                         <span
-                            class="bg-dark rounded-circle d-flex justify-content-center align-items-center"
+                            class="bg-light rounded-circle d-flex justify-content-center align-items-center"
                             style="width: 45px; height: 45px;">
                             <span class="text-white">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                         </span>
                         @endif
                     </a>
                     <ul class="dropdown-menu custom-left-dropdown m-0">
-                        <li><span class="dropdown-item">{{ Auth::user()->name }}</span></li>
+                        <li><span class="dropdown-item"> Hi, {{ Auth::user()->name }}</span></li>
+                        @if (Auth::user()->role == 'admin')
+                        <li><a href="{{route('admin.dashboard')}}" class="dropdown-item">Dashboard</a></li>
+                        @endif
                         <li><a href="{{route('dashboard')}}" class="dropdown-item">Profile Settings</a></li>
                         <li>
                             <hr class="dropdown-divider">

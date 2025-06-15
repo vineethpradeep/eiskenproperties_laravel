@@ -1,7 +1,9 @@
 <div class="property-item rounded overflow-hidden position-relative">
     <div class="position-relative overflow-hidden">
         <a href="{{ url('property/details/' . $property->id . '/' . $property->property_slug) }}">
-            <img class="img-fluid" src="{{ asset($property->property_thumbnail) }}" alt="" />
+            <img class="img-fluid"
+                src="{{ $property->property_thumbnail ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_image.jpg' }}"
+                alt="Property Image" />
         </a>
         <div class="bg-primary rounded text-white position-absolute end-0 top-0  m-4 py-1 px-3">
             For {{ $property->property_category }}
@@ -14,7 +16,7 @@
     </div>
 
     <div class="fav-type">
-        <div class="bg-white rounded-top text-primary start-0 bottom-0 d-inline-flex align-items-center mx-4 pt-1 px-3 bg-light">
+        <div class="bg-white rounded-top text-dark start-0 bottom-0 d-inline-flex align-items-center mx-4 pt-1 px-3 bg-light fw-bold">
             {{ $property->propertyType->property_type_name ?? 'Unknown' }}
         </div>
         <div class="property-favorite mx-2 shadow-sm">

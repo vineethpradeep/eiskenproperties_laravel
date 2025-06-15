@@ -207,12 +207,12 @@
             </div>
             <div class="card-body">
                 <figure class="imagecheck-figure">
-                    <img src="{{ $property->property_thumbnail ? asset($property->property_thumbnail) : 'https://placehold.co/600x400' }}"
+                    <img src="{{ $property->property_thumbnail ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg' }}"
                         alt="Main Image"
                         width="120" height="80">
                     @foreach($multiImage as $key => $img)
                     <img
-                        src="{{ asset($img->image) }}" alt="Image" width="100"
+                        src="{{ asset($img->image ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg') }}" alt="Image" width="100"
                         alt="Image Thumbnail" />
                     @endforeach
 

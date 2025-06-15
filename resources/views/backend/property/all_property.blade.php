@@ -40,7 +40,7 @@
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $item->property_name }}</td>
                                 <td>
-                                    <img src="{{ asset($item->property_thumbnail) }}" alt="{{ $item->property_name }}" style="width: 60px; height: 40px">
+                                    <img src="{{ asset($item->property_thumbnail ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg' ) }}" alt="{{ $item->property_name }}" style="width: 60px; height: 40px">
                                 </td>
                                 <td>{{ $item->property_code }}</td>
                                 <td>

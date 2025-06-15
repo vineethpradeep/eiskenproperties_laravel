@@ -101,6 +101,7 @@
                             <div class="col-12 col-md-4 col-lg-4 mb-3">
                                 <div class="form-group">
                                     <label for="property_thumbnail">Main Image</label>
+                                    <input type="hidden" id="existing_image" value="{{ isset($property) ? $property->property_thumbnail : '' }}">
                                     <input
                                         type="file"
                                         class="form-control validate-on-change"
@@ -125,6 +126,7 @@
                             <div class="col-12 col-md-4 col-lg-4 mb-3">
                                 <div class="form-group">
                                     <label for="multiImageInput">Multiple Image</label>
+                                    <input type="hidden" id="existing_multi_images" value="{{ isset($property) ? $property->multiple_image : '' }}">
                                     <input
                                         type="file"
                                         class="form-control validate-on-change"
@@ -636,27 +638,28 @@
                     required: true,
                 },
                 deposit: {
-                    required: true,
+                    required: false,
                 },
                 property_thumbnail: {
-                    required: function(element) {
-                        return $('#property_thumbnail').get(0).files.length === 0;
+                    required: function() {
+                        let existingImage = $('#existing_image').val().trim();
+                        return existingImage === '' ? false : $('#property_thumbnail').get(0).files.length === 0;
                     }
                 },
                 'multiple_image[]': {
-                    // required: function(element) {
-                    //     return $('#multiImageInput').get(0).files.length === 0;
-                    // }
-                    required: false
+                    required: function() {
+                        let existingImages = $('#existing_multi_images').val().trim();
+                        return existingImages === '' ? false : $('#multiImageInput').get(0).files.length === 0;
+                    }
                 },
                 bedrooms: {
-                    required: true
+                    required: false
                 },
                 bathrooms: {
                     required: true
                 },
                 floors: {
-                    required: true
+                    required: false
                 },
                 property_size: {
                     required: true

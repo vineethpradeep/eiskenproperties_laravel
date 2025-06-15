@@ -34,7 +34,7 @@
                             @foreach($multiImage as $image)
                             <img
                                 alt="{{$property->property_name}}"
-                                src="{{asset($image->image)}}" />
+                                src="{{asset($image->image ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg')}}" />
                             @endforeach
                             <!-- <img
                                 alt=""

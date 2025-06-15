@@ -101,44 +101,6 @@
                                              <span class="time">5 minutes ago</span>
                                          </div>
                                      </a>
-                                     <a href="#">
-                                         <div class="notif-img">
-                                             <img
-                                                 src="{{asset('assets/img/chadengle.jpg')}}"
-                                                 alt="Img Profile" />
-                                         </div>
-                                         <div class="notif-content">
-                                             <span class="subject">Chad</span>
-                                             <span class="block"> Ok, Thanks ! </span>
-                                             <span class="time">12 minutes ago</span>
-                                         </div>
-                                     </a>
-                                     <a href="#">
-                                         <div class="notif-img">
-                                             <img
-                                                 src="{{asset('assets/img/mlane.jpg')}}"
-                                                 alt="Img Profile" />
-                                         </div>
-                                         <div class="notif-content">
-                                             <span class="subject">Jhon Doe</span>
-                                             <span class="block">
-                                                 Ready for the meeting today...
-                                             </span>
-                                             <span class="time">12 minutes ago</span>
-                                         </div>
-                                     </a>
-                                     <a href="#">
-                                         <div class="notif-img">
-                                             <img
-                                                 src="{{asset('assets/img/talha.jpg')}}"
-                                                 alt="Img Profile" />
-                                         </div>
-                                         <div class="notif-content">
-                                             <span class="subject">Talha</span>
-                                             <span class="block"> Hi, Apa Kabar ? </span>
-                                             <span class="time">17 minutes ago</span>
-                                         </div>
-                                     </a>
                                  </div>
                              </div>
                          </li>
@@ -275,8 +237,8 @@
                                          <h4>{{$userdata->name}}</h4>
                                          <p class="text-muted">{{$userdata->email}}</p>
                                          <a
-                                             href="{{route('admin.profile')}}"
-                                             class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                             href="{{url('/')}}"
+                                             class="btn btn-xs btn-secondary btn-sm">Go to Home Page</a>
                                      </div>
                                  </div>
                              </li>

@@ -49,30 +49,27 @@ class PropertyController extends Controller
         $amenities = implode(',', $amenitiesId);
         $pcode = IdGenerator::generate(['table' => 'properties', 'field' => 'property_code', 'length' => 6, 'prefix' => 'EP-']);
         $file = $request->file('property_thumbnail');
-        $path = 'thumbnail/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-        $baseUrl = rtrim(config('filesystems.disks.supabase.url'), '/');
-        if (empty($baseUrl)) {
-            throw new \Exception("SUPABASE_URL is not set. Check your .env file.");
+        if ($file) {
+            $path = 'thumbnail/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+
+            $baseUrl = rtrim(config('filesystems.disks.supabase.url'), '/');
+            $bucket = config('filesystems.disks.supabase.bucket');
+            $uploadUrl = $baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . ltrim($path, '/');
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+                'Content-Type' => $file->getMimeType(),
+            ])->withBody(
+                file_get_contents($file),
+                $file->getMimeType()
+            )->put($uploadUrl);
+            $saveUrl = $response->successful()
+                ? $baseUrl . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/')
+                : null;
+        } else {
+            $saveUrl = null;
         }
-
-        $bucket = config('filesystems.disks.supabase.bucket');
-        if (empty($bucket)) {
-            throw new \Exception("Supabase bucket is not configured. Check config/filesystems.php.");
-        }
-
-        $uploadUrl = $baseUrl . '/storage/v1/object/' . trim($bucket, '/') . '/' . ltrim($path, '/');
-
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
-            'Content-Type'  => $file->getMimeType(),
-        ])->withBody(
-            file_get_contents($file),
-            $file->getMimeType()
-        )->put($uploadUrl);
-
-        $saveUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/public/' . trim($bucket, '/') . '/' . ltrim($path, '/');
-
 
         $property_id = Property::insertGetId([
             'ptype_id' => $request->ptype_id,
@@ -83,12 +80,12 @@ class PropertyController extends Controller
             'property_code' => $pcode,
             'property_status' => $request->property_status,
             'furnishing' => $request->furnishing,
-            'deposit' => $request->deposit,
+            'deposit' => $request->deposit ?? 0,
             'rent' => $request->rent,
             'description' => $request->description,
-            'bedrooms' => $request->bedrooms,
+            'bedrooms' => $request->bedrooms ?? 0,
             'bathrooms' => $request->bathrooms,
-            'floors' => $request->floors,
+            'floors' => $request->floors ?? 0,
             'condition' => $request->condition,
             'epc' => $request->epc,
             'availabilityDate' => $request->availabilityDate,
@@ -117,34 +114,49 @@ class PropertyController extends Controller
         ]);
 
         // Multi Image Upload
-        foreach ($request->file('multiple_image') as $img) {
-            $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
+        $uploadedImages = [];
 
-            $uploadUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/' .
-                trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+        if ($request->hasFile('multiple_image')) {
+            foreach ($request->file('multiple_image') as $img) {
+                $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
 
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
-                'Content-Type' => $img->getMimeType(),
-            ])->withBody(
-                file_get_contents($img),
-                $img->getMimeType()
-            )->put($uploadUrl);
-
-            if ($response->successful()) {
-                $publicUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/public/' .
+                $uploadUrl = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/' .
                     trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
 
-                MultiImage::insert([
-                    'property_id' => $property_id,
-                    'image' => $publicUrl,
-                    'created_at' => now(),
-                ]);
+                $response = Http::withHeaders([
+                    'Authorization' => 'Bearer ' . config('filesystems.disks.supabase.service_key'),
+                    'Content-Type' => $img->getMimeType(),
+                ])->withBody(
+                    file_get_contents($img),
+                    $img->getMimeType()
+                )->put($uploadUrl);
+
+                if ($response->successful()) {
+                    $uploadedImages[] = rtrim(config('filesystems.disks.supabase.url'), '/') . '/storage/v1/object/public/' .
+                        trim(config('filesystems.disks.supabase.bucket'), '/') . '/' . ltrim($path, '/');
+                }
             }
         }
 
+        if (empty($uploadedImages)) {
+            $uploadedImages = [null];
+        }
 
-        return redirect()->route('all.property')->with('success', 'Property Added Successfully');
+        foreach ($uploadedImages as $imageUrl) {
+            MultiImage::insert([
+                'property_id' => $property_id,
+                'image' => $imageUrl,
+                'created_at' => now(),
+            ]);
+        }
+
+        $notification = [
+            'message' => 'Property Added Successfully',
+            'alert-type' => 'success',
+        ];
+
+
+        return redirect()->route('all.property')->with($notification);
     }
 
     public function EditProperty($id)
@@ -182,7 +194,7 @@ class PropertyController extends Controller
             'property_slug' => strtolower(str_replace(' ', '-', $request->property_name)),
             'property_status' => $request->property_status,
             'furnishing' => $request->furnishing,
-            'deposit' => $request->deposit,
+            'deposit' => $request->deposit ?? 0,
             'rent' => $request->rent,
             'description' => $request->description,
             'bedrooms' => $request->bedrooms,
