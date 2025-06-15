@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Schedule Confirmed</title>
+    <title>Enquiry Confirmed</title>
     <style>
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -105,21 +105,20 @@
 
     <div class="container">
         <div class="header">
-            <h1>Your Viewing is Confirmed</h1>
+            <h1>Thank you for your enquiry</h1>
         </div>
 
-        <p>Hello {{$schedule['name']}},</p>
+        @dump($enquiry)
+        <h2>Hello {{ $enquiry['name'] }},</h2>
+        <p>Thank you for reaching out! We have received your contact enquiry and will get back to you soon.</p>
 
-        <p>Thank you for booking a viewing with Eisken Properties. We are pleased to confirm your appointment. </p>
+        <p><strong>Email:</strong> {{ $enquiry['email'] }}</p>
+        <p><strong>Phone:</strong> {{ $enquiry['phone'] }}</p>
 
-        <p><strong>Viewing Details:</strong></p>
-        <ul>
-            <li><span class="highlight">Date:</span> {{ \Carbon\Carbon::parse($schedule['view_date'])->format('d/m/Y') }}</li>
-            <li><span class="highlight">Time:</span> {{ \Carbon\Carbon::parse($schedule['view_time'])->format('g:i A') }}</li>
-            <li><span class="highlight">Property Address:</span> {{$schedule['property_address'] }}</li>
-        </ul>
+        <p><strong>Interested in scheduling a property - {{$enquiry['property_address'] }} viewing?</strong></p>
 
-        <p>If you need to reschedule or have any queries before your visit, do not hesitate to contact us at our office Tel: 01792 644023 or Email: <a href="mailto:enquiries@eiskenp.com">enquiries@eiskenp.com</a>
+        <p>Please schedule your viewing through our website, and we will arrange the appointment for you.
+            If you have any questions, do not hesitate to contact us at our office Tel: 01792 644023 or Email: <a href="mailto:enquiries@eiskenp.com">enquiries@eiskenp.com</a>
         </p>
 
         <!-- Begin Optional Viewing Message -->
@@ -140,7 +139,7 @@
                                         <tr>
                                             <td class="pad" style="padding-bottom:15px;width:100%;">
                                                 <div class="alignment" align="center">
-                                                    <div style="max-width: 500px;"><img src="https://res.cloudinary.com/eiskenproperties/image/upload/v1748297839/rvtjzpgfjqgp0owifrub.png" style="display: block; height: auto; border: 0; width: 100%;" width="500" alt="Image" title="Image"></div>
+                                                    <div style="max-width: 500px;"><img src="https://res.cloudinary.com/eiskenproperties/image/upload/v1749988842/qwhvlhbubzn4aau3iu5w.png" style="display: block; height: auto; border: 0; width: 100%;" width="500" alt="Image" title="Image"></div>
                                                 </div>
                                             </td>
                                         </tr>

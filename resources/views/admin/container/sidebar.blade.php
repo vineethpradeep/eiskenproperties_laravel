@@ -125,10 +125,10 @@
           </a>
         </li>
         <li class="nav-item">
-          <a href="{{route('schedule.request')}}">
+          <a href="{{route('property.enquiry.request')}}">
             <i class="fas fa-user-edit"></i>
             <p>Enquiry</p>
-            <span class="badge badge-secondary">0</span>
+            <span class="badge badge-secondary">{{$pendingEnquiries}}</span>
           </a>
         </li>
       </ul>

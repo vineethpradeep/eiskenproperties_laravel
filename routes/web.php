@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\PropertyController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\WishlistController;
 use App\Http\Controllers\Backend\SupabaseUploadController;
+use App\Http\Controllers\ContactController;
 use App\Http\Middleware\Role;
 use App\Models\Property;
 use App\Models\User;
@@ -31,7 +32,7 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/mail', function () {
-    return view('mail.schedule_confirmed_mail');
+    return view('mail.contact_enquiry_mail');
 })->name('mail');
 
 Route::get('/contact', function () {
@@ -120,3 +121,9 @@ Route::post('/wishlist/toggle/{id}', [WishlistController::class, 'toggle'])
 Route::post('/schedule/viewing', [PropertyController::class, 'ScheduleViewing'])->name('schedule.viewing');
 Route::get('/schedule/request', [PropertyController::class, 'ScheduleRequest'])->name('schedule.request');
 Route::get('/delete/schedule/{id}', [PropertyController::class, 'DeleteSchedule'])->name('delete.schedule');
+
+Route::post('/contacts/store', [ContactController::class, 'store'])->name('contacts.store');
+Route::get('/property/enquiry/request', [ContactController::class, 'EnquiryRequest'])->name('property.enquiry.request');
+Route::get('/property/enquiry/view/{id}', [ContactController::class, 'EnquiryView'])->name('property.enquiry.view');
+Route::post('/property/update/enquiry', [ContactController::class, 'UpdateEnquiry'])->name('property.update.enquiry');
+Route::get('/property/delete/enquiry/{id}', [ContactController::class, 'DeleteEnquiry'])->name('property.delete.enquiry');

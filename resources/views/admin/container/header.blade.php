@@ -75,6 +75,9 @@
                          aria-haspopup="true"
                          aria-expanded="false">
                          <i class="fa fa-envelope"></i>
+                         @if(isset($pendingCount) && $pendingCount > 0)
+                         <span class="notification">{{$pendingCount}} </span>
+                         @endif
                      </a>
                      <ul
                          class="dropdown-menu messages-notif-box animated fadeIn"
@@ -88,19 +91,21 @@
                          </li>
                          <li>
                              <div class="message-notif-scroll scrollbar-outer">
-                                 <div class="notif-center">
+                                 <div class="notif-center m-2">
+                                     @foreach($contactsData->where('status', 0) as $contact)
                                      <a href="#">
-                                         <div class="notif-img">
-                                             <img
-                                                 src="{{asset('assets/img/jm_denis.jpg')}}"
-                                                 alt="Img Profile" />
+                                         <div class="avatar-sm">
+                                             <div id="initials" class="avatar-title rounded border border-white">
+                                                 {{ strtoupper(substr($contact->name, 0, 1)) }}
+                                             </div>
                                          </div>
                                          <div class="notif-content">
-                                             <span class="subject">Jimmy Denis</span>
-                                             <span class="block"> How are you ? </span>
-                                             <span class="time">5 minutes ago</span>
+                                             <span class="subject">{{ $contact->name }}</span>
+                                             <span class="block">{{ $contact->address }}</span>
+                                             <span class="time">{{ \Carbon\Carbon::parse($contact->created_at)->diffForHumans() }}</span>
                                          </div>
                                      </a>
+                                     @endforeach
                                  </div>
                              </div>
                          </li>

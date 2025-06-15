@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Models\Property;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Contact;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -37,11 +38,14 @@ class ViewServiceProvider extends ServiceProvider
         $acceptedView = 0;
         $todayRequests = collect();
         $propertyRequests = collect();
+        $totalEnquiries = 0;
+        $pendingEnquiries = 0;
 
         if (
-            Schema::hasTable('property_viewings') &&
-            Schema::hasTable('users') &&
-            Schema::hasTable('properties')
+            Schema::hasTable('property_viewings') ||
+            Schema::hasTable('users') ||
+            Schema::hasTable('properties') ||
+            Schema::hasTable('contacts')
         ) {
             $propertyRequests = PropertyViewing::select('property_id', DB::raw('count(*) as request_count'))
                 ->groupBy('property_id')
@@ -65,6 +69,17 @@ class ViewServiceProvider extends ServiceProvider
                 ->take(5)
                 ->get();
             $totalCount = $pendingCount + $inActiveUserCount;
+            if (Schema::hasTable('contacts')) {
+                $totalEnquiries = Contact::count();
+                $pendingEnquiries = Contact::where('status', '0')->count();
+            }
+            if (Schema::hasTable('contacts') && Schema::hasTable('properties')) {
+                $contactsData = Contact::select('contacts.name', 'contacts.property_id', 'properties.address')
+                    ->join('properties', 'contacts.property_id', '=', 'properties.id')
+                    ->where('contacts.status', 0)
+                    ->get();
+            }
+            // dd($totalCount);
         }
 
         View::share([
@@ -78,6 +93,9 @@ class ViewServiceProvider extends ServiceProvider
             'acceptedView' => $acceptedView,
             'todayRequests' => $todayRequests,
             'propertyRequests' => $propertyRequests,
+            'totalEnquiries' => $totalEnquiries,
+            'pendingEnquiries' => $pendingEnquiries,
+            'contactsData' => $contactsData
         ]);
     }
 }
