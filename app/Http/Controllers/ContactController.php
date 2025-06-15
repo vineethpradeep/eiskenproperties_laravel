@@ -63,7 +63,7 @@ class ContactController extends Controller
             'phone' => $sendMail->phone,
             'property_address' => $sendMail->property->address,
         ];
-        dd($data);
+        // dd($data);
         Mail::to($sendMail->email)->send(new ContactEnquiry($data));
 
         $notification = [
