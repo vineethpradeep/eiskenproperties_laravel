@@ -48,7 +48,9 @@ class IndexController extends Controller
     {
         $category = 'sales';
         $query = Property::with('propertyType')
-            ->where('property_category', 'sales');
+            ->where('property_category', 'sales')
+            ->whereBetween('rent', [100000, 5000000]);
+
         if ($request->filled('search')) {
             $query->where('property_name', 'like', '%' . $request->search . '%');
         }
@@ -75,12 +77,12 @@ class IndexController extends Controller
             $query->where('floors', $request->floors);
         }
 
-        if ($request->filled('min_rent')) {
-            $query->where('rent', '>=', $request->min_rent);
+        if ($request->filled('min_price')) {
+            $query->where('rent', '>=', $request->min_price);
         }
 
-        if ($request->filled('max_rent')) {
-            $query->where('rent', '<=', $request->max_rent);
+        if ($request->filled('max_price')) {
+            $query->where('rent', '<=', $request->max_price);
         }
 
         // if ($request->filled('min_square_feet')) {
@@ -100,7 +102,8 @@ class IndexController extends Controller
         $category = 'rent';
         $query = Property::with('propertyType')
             ->where('status', 1)
-            ->where('property_category', 'rent');
+            ->where('property_category', 'rent')
+            ->whereBetween('rent', [200, 10000]);
 
         if ($request->filled('search')) {
             $query->where('property_name', 'like', '%' . $request->search . '%');
@@ -128,12 +131,12 @@ class IndexController extends Controller
             $query->where('floors', $request->floors);
         }
 
-        if ($request->filled('min_rent')) {
-            $query->where('rent', '>=', $request->min_rent);
+        if ($request->filled('min_price')) {
+            $query->where('rent', '>=', $request->min_price);
         }
 
-        if ($request->filled('max_rent')) {
-            $query->where('rent', '<=', $request->max_rent);
+        if ($request->filled('max_price')) {
+            $query->where('rent', '<=', $request->max_price);
         }
 
         // if ($request->filled('min_square_feet')) {
@@ -178,12 +181,12 @@ class IndexController extends Controller
             $query->where('floors', $request->floors);
         }
 
-        if ($request->filled('min_rent')) {
-            $query->where('rent', '>=', $request->min_rent);
+        if ($request->filled('min_price')) {
+            $query->where('rent', '>=', $request->min_price);
         }
 
-        if ($request->filled('max_rent')) {
-            $query->where('rent', '<=', $request->max_rent);
+        if ($request->filled('max_price')) {
+            $query->where('rent', '<=', $request->max_price);
         }
 
         // if ($request->filled('min_square_feet')) {

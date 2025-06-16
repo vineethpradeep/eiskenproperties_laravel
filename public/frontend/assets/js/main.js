@@ -366,6 +366,55 @@
 
     // Advanced Search
     document.addEventListener("DOMContentLoaded", () => {
+        // Advanced Search
+        const saleTab = document.getElementById("sale-tab");
+        const rentTab = document.getElementById("rent-tab");
+        const minPriceInput = document.querySelector(".rangeMin");
+        const maxPriceInput = document.querySelector(".rangeMax");
+        const minPriceValue = document.querySelector(".rangeMinValue");
+        const maxPriceValue = document.querySelector(".rangeMaxValue");
+
+        function formatPrice(value) {
+            return "£" + Number(value).toLocaleString("en-GB");
+        }
+
+        function updatePriceRange(category) {
+            if (category === "rent") {
+                minPriceInput.min = 250;
+                minPriceInput.max = 10000;
+                minPriceInput.value = 250;
+
+                maxPriceInput.min = 250;
+                maxPriceInput.max = 10000;
+                maxPriceInput.value = 3000;
+            } else if (category === "sales") {
+                minPriceInput.min = 10000;
+                minPriceInput.max = 5000000;
+                minPriceInput.value = 10000;
+
+                maxPriceInput.min = 10000;
+                maxPriceInput.max = 5000000;
+                maxPriceInput.value = 1274300;
+            }
+
+            // Update displayed values
+            minPriceValue.textContent = formatPrice(minPriceInput.value);
+            maxPriceValue.textContent = formatPrice(maxPriceInput.value);
+        }
+
+        saleTab.addEventListener("click", function () {
+            updatePriceRange("sales");
+        });
+
+        rentTab.addEventListener("click", function () {
+            updatePriceRange("rent");
+        });
+
+        // Initialize default values on page load (set to Rent initially)
+        updatePriceRange("rent");
+
+        // end advanced search
+
         document.querySelectorAll(".more-filter a").forEach((toggle) => {
             const form = toggle.closest("form");
             const wrapper = form.querySelector(".more-filters-wrapper");

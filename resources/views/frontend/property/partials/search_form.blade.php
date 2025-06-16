@@ -155,7 +155,7 @@
                             data-prefix="£">
                             <div class="range-values">
                                 <div class="label">
-                                    Rent Range
+                                    Price Range
                                 </div>
                                 <div class="value">
                                     <span class="rangeMinValue">250</span>
@@ -169,19 +169,13 @@
                                 <input
                                     type="range"
                                     class="rangeMin"
-                                    name="min_rent"
-                                    min="250"
-                                    max="10000"
-                                    value="250"
-                                    step="50" />
+                                    name="min_price"
+                                    min="250" max="10000" value="250" step="50" />
                                 <input
                                     type="range"
                                     class="rangeMax"
-                                    name="max_rent"
-                                    min="250"
-                                    max="10000"
-                                    value="3000"
-                                    step="50" />
+                                    name="max_price"
+                                    min="250" max="10000" value="3000" step="50" />
                             </div>
                         </div>
                     </div>
