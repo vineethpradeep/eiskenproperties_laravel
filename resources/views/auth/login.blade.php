@@ -6,6 +6,12 @@
 
 
  @section('main')
+
+ @if(session('error'))
+ <div class="alert alert-danger">
+     {{ session('error') }}
+ </div>
+ @endif
  <!-- Contact form Start -->
  <div class="container-xxl py-5">
      <div class="container">
@@ -64,7 +70,7 @@
              </div>
              <div class="col-md-6">
                  <div class="wow fadeInUp" data-wow-delay="0.5s">
-                     <form action="{{route('login')}}" method="post">
+                     <form action="{{route('login')}}" method="post" id="loginForm">
                          @csrf
                          <div class="row g-3">
                              <div class="col-12">
@@ -75,8 +81,10 @@
                                          id="login"
                                          name="login"
                                          placeholder="User Name / Email / Phone"
-                                         autocomplete="off" />
+                                         autocomplete="off"
+                                         required />
                                      <label for="login">User Name / Email / Phone</label>
+                                     <small class="text-danger">@error('login') {{ $message }} @enderror</small>
                                  </div>
                              </div>
                              <div class="col-12">
@@ -87,8 +95,10 @@
                                          id="password"
                                          name="password"
                                          placeholder="Password"
-                                         autocomplete="off" />
+                                         autocomplete="off"
+                                         required />
                                      <label for="password">Password</label>
+                                     <small class="text-danger">@error('password') {{ $message }} @enderror</small>
                                  </div>
                              </div>
                              <div class="col-12">
@@ -113,3 +123,39 @@
  </div>
  <!-- Contact form End -->
  @endsection
+
+ <script>
+     document.addEventListener("DOMContentLoaded", function() {
+         const form = document.getElementById("loginForm");
+         const loginInput = document.getElementById("login");
+         const passwordInput = document.getElementById("password");
+
+         form.addEventListener("submit", function(event) {
+             let errors = [];
+
+             document.getElementById("loginError").textContent = "";
+             document.getElementById("passwordError").textContent = "";
+
+             if (loginInput.value.trim() === "") {
+                 errors.push({
+                     field: "loginError",
+                     message: "Username / Email / Phone is required."
+                 });
+             }
+
+             if (passwordInput.value.trim().length < 6) {
+                 errors.push({
+                     field: "passwordError",
+                     message: "Password must be at least 6 characters."
+                 });
+             }
+
+             if (errors.length > 0) {
+                 event.preventDefault();
+                 errors.forEach(error => {
+                     document.getElementById(error.field).textContent = error.message;
+                 });
+             }
+         });
+     });
+ </script>

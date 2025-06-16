@@ -75,8 +75,10 @@
                                          id="name"
                                          name="name"
                                          placeholder="Name"
-                                         autocomplete="off" />
+                                         autocomplete="off"
+                                         required />
                                      <label for="name">User Name</label>
+                                     <small class="text-danger">@error('name') {{ $message }} @enderror</small>
                                  </div>
                              </div>
                              <div class="col-12">
@@ -87,8 +89,10 @@
                                          id="email"
                                          name="email"
                                          placeholder="Email"
-                                         autocomplete="off" />
+                                         autocomplete="off"
+                                         required />
                                      <label for="email">Email</label>
+                                     <small class="text-danger">@error('email') {{ $message }} @enderror</small>
                                  </div>
                              </div>
                              <div class="col-12">
@@ -99,8 +103,10 @@
                                          id="password"
                                          name="password"
                                          placeholder="Password"
-                                         autocomplete="off" />
+                                         autocomplete="off"
+                                         required />
                                      <label for="password">Password</label>
+                                     <small class="text-danger">@error('password') {{ $message }} @enderror</small>
                                  </div>
                              </div>
                              <div class="col-12">
@@ -111,8 +117,10 @@
                                          id="password_confirmation"
                                          name="password_confirmation"
                                          placeholder="Password"
-                                         autocomplete="off" />
+                                         autocomplete="off"
+                                         required />
                                      <label for="password_confirmation">Confirm Password</label>
+                                     <small class="text-danger">@error('password_confirmation') {{ $message }} @enderror</small>
                                  </div>
                              </div>
                              <div class="col-12">
@@ -137,3 +145,71 @@
  </div>
  <!-- Contact form End -->
  @endsection
+
+ <script type="text/javascript">
+     document.addEventListener("DOMContentLoaded", function() {
+         const form = document.getElementById("registerForm");
+
+         form.addEventListener("submit", function(event) {
+             const name = document.getElementById("name");
+             const email = document.getElementById("email");
+             const phone = document.getElementById("phone");
+             const password = document.getElementById("password");
+             const confirmPassword = document.getElementById("password_confirmation");
+
+             const errors = [];
+
+             document.querySelectorAll(".text-danger").forEach(el => el.textContent = "");
+
+             if (name.value.trim() === "") {
+                 errors.push({
+                     field: "name",
+                     message: "User Name is required."
+                 });
+             }
+
+             if (!validateEmail(email.value)) {
+                 errors.push({
+                     field: "email",
+                     message: "Invalid email format."
+                 });
+             }
+
+             if (!validatePhone(phone.value)) {
+                 errors.push({
+                     field: "phone",
+                     message: "Invalid phone number format."
+                 });
+             }
+
+             if (password.value.trim().length < 8) {
+                 errors.push({
+                     field: "password",
+                     message: "Password must be at least 8 characters."
+                 });
+             }
+
+             if (password.value !== confirmPassword.value) {
+                 errors.push({
+                     field: "password_confirmation",
+                     message: "Passwords do not match."
+                 });
+             }
+
+             if (errors.length > 0) {
+                 event.preventDefault();
+                 errors.forEach(error => {
+                     document.getElementById(error.field).nextElementSibling.textContent = error.message;
+                 });
+             }
+         });
+
+         function validateEmail(email) {
+             return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+         }
+
+         function validatePhone(phone) {
+             return /^\d{10,15}$/.test(phone);
+         }
+     });
+ </script>

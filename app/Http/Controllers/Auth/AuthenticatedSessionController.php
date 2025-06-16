@@ -25,36 +25,36 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
-        // dd($request->all());
+        $request->validate([
+            'login' => ['required', 'string'],
+            'password' => ['required', 'string', 'min:6'],
+        ]);
 
-        $id = Auth::user()->id;
-        $admindata = User::find($id);
-        $username = $admindata->name;
+        $user = User::where(function ($query) use ($request) {
+            $query->where('email', $request->login)
+                ->orWhere('username', $request->login)
+                ->orWhere('phone', $request->login);
+        })->first();
+
+        if (!$user || !Auth::attempt(['email' => $user->email, 'password' => $request->password])) {
+            return back()->withErrors(['login' => 'Invalid username, email, or phone number'])->withInput();
+        }
+
+        // User authentication successful
+        $request->session()->regenerate();
 
         $user = Auth::user();
-        $user->status = 'active';
-        $user->save();
-
-        $request->session()->regenerate();
-        $url = "";
+        $user->update(['status' => 'active']);
 
         $notification = [
-            'message' => ' User ' . $username . ' Login Successfully',
+            'message' => 'User ' . $user->name . ' Login Successfully',
             'alert-type' => 'info',
         ];
 
-        if ($request->user()->role == "admin") {
-            $url = 'admin/dashboard';
-        } else if ($request->user()->role == "agent") {
-            $url = 'admin/dashboard';
-        } else {
-            $url = 'dashboard';
-        }
-
-        // return redirect()->intended(route('dashboard', absolute: false));
-        return redirect()->intended($url)->with($notification);
+        return redirect()->intended($user->role === 'admin' ? 'admin/dashboard' : 'dashboard')->with($notification);
     }
+
+
 
     /**
      * Destroy an authenticated session.
