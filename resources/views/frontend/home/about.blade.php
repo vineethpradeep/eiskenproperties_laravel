@@ -20,7 +20,7 @@
             </div>
             <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
                 <span class="caption">IT’S TIME TO KNOW ABOUT US </span>
-                <h1 class="mb-4">We help you find your new places</h1>
+                <h1 class="mb-4">We help you find your ideal property</h1>
                 <p class="mb-4">
                     Online property marketplace to buy, sell, and rent residential
                     and commercial properties. Used by millions of renters to find
@@ -38,7 +38,7 @@
                     <i class="fa fa-check text-primary me-3"></i>500+ Completed
                     Projects
                 </p>
-                <a class="btn btn-primary py-3 px-5 mt-3" href="about.html">Read More</a>
+                <a class="btn btn-primary py-3 px-5 mt-3" href="{{url('/about')}}">Read More</a>
             </div>
         </div>
     </div>
