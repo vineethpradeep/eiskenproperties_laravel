@@ -5,8 +5,13 @@
                 src="{{ $property->property_thumbnail ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_image.jpg' }}"
                 alt="Property Image" />
         </a>
-        <div class="bg-primary rounded text-white position-absolute end-0 top-0  m-4 py-1 px-3">
-            For {{ $property->property_category }}
+        @php
+        $category = strtolower($property->property_category);
+        @endphp
+
+        <div class="rounded text-white position-absolute end-0 top-0 m-4 py-1 px-3
+    {{ $category === 'rent' ? 'bg-warning' : 'bg-success' }}">
+            For {{ ucfirst($property->property_category) }}
         </div>
         @if ($property->featured)
         <div class="feature-tag">
