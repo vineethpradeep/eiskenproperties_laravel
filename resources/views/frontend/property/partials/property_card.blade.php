@@ -36,7 +36,7 @@
     </div>
 
     <div class="p-4 pb-0">
-        <h5 class="text-primary mb-3 mt-2">£{{ $property->rent }}</h5>
+        <h5 class="text-primary mb-3 mt-2">£{{ number_format($property->rent) }}</h5>
         <a class="d-block h5 mb-2" href="{{ url('property/details/' . $property->id . '/' . $property->property_slug) }}">
             {{ $property->property_name }}
         </a>
