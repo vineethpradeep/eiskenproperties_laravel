@@ -25,7 +25,7 @@
                     approach.
                 </p>
                 <p class="fw-bold">
-                    <i class="fa fa-check text-primary me-3"></i>More than 20 years
+                    <i class="fa fa-check text-primary me-3"></i>ore than 25+ years
                     of experience
                 </p>
                 <p class="fw-bold">
@@ -33,8 +33,7 @@
                     trusting our agency
                 </p>
                 <p class="fw-bold">
-                    <i class="fa fa-check text-primary me-3"></i>500+ Completed
-                    Projects
+                    <i class="fa fa-check text-primary me-3"></i>500+ Satisfied Customers in the past 4 years
                 </p>
                 <a class="btn btn-primary py-3 px-5 mt-3" href="">View Policy</a>
             </div>
@@ -58,8 +57,7 @@
                     <h1 class="mb-3">Speak with a Licensed Property Expert</h1>
                     <p>
                         Our certified agents are fully licensed and trained to guide
-                        you through every step of the buying, selling, or renting
-                        process. Whether you're ready to sign an agreement or just
+                        you through every step of the buying, selling, and renting process. Whether you're ready to sign an agreement or just
                         exploring your options, our team is here to provide expert
                         advice, legal clarity, and trustworthy support
                     </p>

@@ -23,11 +23,10 @@
                 <h1 class="mb-4">We help you find your ideal property</h1>
                 <p class="mb-4">
                     Online property marketplace to buy, sell, and rent residential
-                    and commercial properties. Used by millions of renters to find
-                    property. Browse millions of properties in your city save your
+                    and commercial properties. Used by a diverse range of clients to source their ideal home. We offer countless properties to help you find your ideal home with :
                 </p>
                 <p class="fw-bold">
-                    <i class="fa fa-check text-primary me-3"></i>More than 20 years
+                    <i class="fa fa-check text-primary me-3"></i>More than 25+ years
                     of experience
                 </p>
                 <p class="fw-bold">
@@ -35,8 +34,7 @@
                     trusting our agency
                 </p>
                 <p class="fw-bold">
-                    <i class="fa fa-check text-primary me-3"></i>500+ Completed
-                    Projects
+                    <i class="fa fa-check text-primary me-3"></i>500+ Satisfied Customers in the past 4 years
                 </p>
                 <a class="btn btn-primary py-3 px-5 mt-3" href="{{url('/about')}}">Read More</a>
             </div>

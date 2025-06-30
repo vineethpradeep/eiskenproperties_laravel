@@ -19,8 +19,7 @@
             <h1 class="mb-3">Eisken Properties LLC</h1>
             <p>
                 Have questions or need more details? Reach out to Eisken
-                Properties and we're here to help! Our team typically responds
-                within 1–2 business days. Whether you're buying, renting, or just
+                Properties and we're here to help! Our team aims to respond as soon as possible within 1-2 business days. Whether you're buying, renting, or just
                 exploring, we’re happy to assist you every step of the way.
             </p>
         </div>

@@ -1,6 +1,28 @@
+@php
+$searchType = request('search_type', 'rent');
+
+$defaultPrices = [
+'sale' => ['min' => 50000, 'max' => 5000000],
+'rent' => ['min' => 250, 'max' => 10000],
+];
+
+$selectedDefaults = $defaultPrices[$searchType];
+
+$minPrice = request()->has('min_price') ? (int) request('min_price') : $selectedDefaults['min'];
+$maxPrice = request()->has('max_price') ? (int) request('max_price') : $selectedDefaults['max'];
+
+$minSqft = request('min_square_feet', 400);
+$maxSqft = request('max_square_feet', 10000);
+
+$minSlider = $selectedDefaults['min'];
+$maxSlider = $selectedDefaults['max'];
+$stepSlider = $searchType === 'sale' ? 1000 : 250;
+@endphp
+
+
 <div class="row">
     <div class="col-12">
-        <form action="{{ $action }}" method="GET">
+        <form action="{{ $action }}" method="GET" data-search-type="{{ Str::contains($action, 'sale') ? 'sale' : 'rent' }}">
             @csrf
             <div class="row">
                 <div
@@ -90,7 +112,7 @@
                         class="col-12 col-lg-4 mt-3 mt-lg-4">
                         <div
                             class="form-floating custom-dropdown"
-                            data-options='["Any","1","2","3","4","5"]'>
+                            data-options='["Any","1","2","3","4","5+"]'>
                             <input
                                 type="text"
                                 name="bedrooms"
@@ -111,7 +133,7 @@
                         class="col-12 col-lg-4 mt-3 mt-lg-4">
                         <div
                             class="form-floating custom-dropdown"
-                            data-options='["Any","1","2","3","4","5"]'>
+                            data-options='["Any","1","2","3","4","5+"]'>
                             <input
                                 type="text"
                                 name="bathrooms"
@@ -131,7 +153,7 @@
                         class="col-12 col-lg-4 mt-3 mt-lg-4">
                         <div
                             class="form-floating custom-dropdown"
-                            data-options='["Any","1","2","3"]'>
+                            data-options='["Any","1","2","3", "4","5+"]'>
                             <input
                                 type="text"
                                 name="floors"
@@ -152,70 +174,93 @@
                         class="col-12 col-lg-4 mt-3 mt-lg-4">
                         <div
                             class="range-slider"
-                            data-prefix="£">
+                            data-prefix="£"
+                            data-sale-min="50000"
+                            data-sale-max="5000000"
+                            data-sale-step="1000"
+                            data-rent-min="250"
+                            data-rent-max="10000"
+                            data-rent-step="250">
                             <div class="range-values">
-                                <div class="label">
-                                    Price Range
-                                </div>
+                                <div class="label">Price Range</div>
                                 <div class="value">
-                                    <span class="rangeMinValue">250</span>
+                                    <span class="rangeMinValue">£{{ number_format($minPrice) }}</span>
                                     -
-                                    <span class="rangeMaxValue">10000</span>
+                                    <span class="rangeMaxValue">£{{ number_format($maxPrice) }}</span>
                                 </div>
                             </div>
+
                             <div class="range-bar">
-                                <div
-                                    class="range-slider-track"></div>
+                                <div class="range-slider-track"></div>
+
                                 <input
                                     type="range"
                                     class="rangeMin"
-                                    name="min_price"
-                                    min="250" max="10000" value="250" step="50" />
+                                    min="{{ $minSlider }}"
+                                    max="{{ $maxSlider }}"
+                                    value="{{ $minPrice }}"
+                                    step="{{ $stepSlider }}" />
                                 <input
                                     type="range"
                                     class="rangeMax"
-                                    name="max_price"
-                                    min="250" max="10000" value="3000" step="50" />
+                                    min="{{ $minSlider }}"
+                                    max="{{ $maxSlider }}"
+                                    value="{{ $maxPrice }}"
+                                    step="{{ $stepSlider }}" />
+
+                                <!-- Hidden inputs for form submission -->
+                                <input type="hidden" name="min_price" class="hiddenMinPrice" value="{{ $minPrice }}" />
+                                <input type="hidden" name="max_price" class="hiddenMaxPrice" value="{{ $maxPrice }}" />
+
+
                             </div>
                         </div>
                     </div>
 
                     <div
                         class="col-12 col-lg-4 mt-3 mt-lg-4">
-                        <div
-                            class="range-slider"
-                            data-prefix="Sqft ">
+                        <div class="range-slider"
+                            data-prefix="Sqft "
+                            data-sale-min="1000"
+                            data-sale-max="10000"
+                            data-sale-step="500"
+                            data-rent-min="400"
+                            data-rent-max="5000"
+                            data-rent-step="50">
+
                             <div class="range-values">
-                                <div class="label">
-                                    Square Feet
-                                </div>
+                                <div class="label">Square Feet</div>
                                 <div class="value">
-                                    <span class="rangeMinValue">600</span>
-                                    -
-                                    <span class="rangeMaxValue">20000</span>
+                                    <span class="rangeMinValue">400</span> -
+                                    <span class="rangeMaxValue">5000</span>
                                 </div>
                             </div>
+
                             <div class="range-bar">
-                                <div
-                                    class="range-slider-track"></div>
+                                <div class="range-slider-track"></div>
                                 <input
                                     type="range"
                                     class="rangeMin"
-                                    name="min_square_feet"
                                     min="400"
                                     max="5000"
-                                    value="600"
+                                    value="{{ $minSqft }}"
                                     step="50" />
                                 <input
                                     type="range"
                                     class="rangeMax"
-                                    name="max_square_feet"
                                     min="400"
                                     max="5000"
-                                    value="3000"
+                                    value="{{ $maxSqft }}"
                                     step="50" />
+
+                                <!-- Hidden inputs for form submission -->
+                                <input type="hidden" name="min_square_feet" class="hiddenMinSquareFeet" value="{{ $minSqft }}" />
+                                <input type="hidden" name="max_square_feet" class="hiddenMaxSquareFeet" value="{{ $maxSqft }}" />
+
                             </div>
                         </div>
+
+
                     </div>
                 </div>
 
@@ -237,7 +282,7 @@
                         <button
                             type="submit"
                             class="btn btn-primary w-100">
-                            Filter
+                            Search
                         </button>
                     </div>
                 </div>

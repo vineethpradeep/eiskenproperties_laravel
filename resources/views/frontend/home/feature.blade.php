@@ -30,7 +30,7 @@ $userWishlist = Wishlist::where('user_id', Auth::id())
                     <p>
                         A property that is available for sale or rent, with a focus on
                         market valuation and maintenance. We are here to help you find
-                        the best property for your needs
+                        the best property for your needs and budget.
                     </p>
                 </div>
             </div>

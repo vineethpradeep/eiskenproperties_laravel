@@ -11,7 +11,7 @@ $PropertyType = App\Models\PropertyType::latest()->limit(4)->get();
             <h1 class="mb-3">We have the perfect property waiting for you!</h1>
             <p>
                 From cozy homes to grand estates, our property portfolio is
-                designed to impress. Here’s what we currently have available
+                designed to impress. Here’s what we currently have available :
             </p>
         </div>
         <div class="row g-4">

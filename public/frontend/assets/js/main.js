@@ -217,6 +217,10 @@
         );
     });
 
+    function numberWithCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     // Custom Dropdown
     function initRangeSliders() {
         document.querySelectorAll(".range-slider").forEach((slider) => {
@@ -227,18 +231,28 @@
             const track = slider.querySelector(".range-slider-track");
             const prefix = slider.dataset.prefix || "";
 
+            // Add references to hidden inputs
+            const hiddenMinInput = slider.querySelector(
+                "input[type='hidden'].hiddenMinPrice, input[type='hidden'].hiddenMinSquareFeet"
+            );
+            const hiddenMaxInput = slider.querySelector(
+                "input[type='hidden'].hiddenMaxPrice, input[type='hidden'].hiddenMaxSquareFeet"
+            );
+
             function updateTrack() {
-                const min = parseInt(minInput.value);
-                const max = parseInt(maxInput.value);
+                let min = parseInt(minInput.value);
+                let max = parseInt(maxInput.value);
                 const rangeMin = parseInt(minInput.min);
                 const rangeMax = parseInt(maxInput.max);
-                const total = rangeMax - rangeMin;
 
-                // Calculate percent positions for gradient
+                if (min > max) {
+                    [min, max] = [max, min];
+                }
+
+                const total = rangeMax - rangeMin;
                 const minPercent = ((min - rangeMin) / total) * 100;
                 const maxPercent = ((max - rangeMin) / total) * 100;
 
-                // Update the track gradient between min and max slider positions
                 track.style.background = `linear-gradient(to right,
                     #ccc 0%,
                     #ccc ${minPercent}%,
@@ -247,35 +261,72 @@
                     #ccc ${maxPercent}%,
                     #ccc 100%)`;
 
-                // Update displayed min and max values with prefix (e.g., £)
-                minValue.textContent = `${prefix}${min}`;
-                maxValue.textContent = `${prefix}${max}`;
+                minValue.textContent = prefix + numberWithCommas(min);
+                maxValue.textContent = prefix + numberWithCommas(max);
+
+                // Update hidden inputs to submit the correct values
+                if (hiddenMinInput) hiddenMinInput.value = min;
+                if (hiddenMaxInput) hiddenMaxInput.value = max;
+
+                // Also sync visible slider inputs so they stay consistent
+                minInput.value = min;
+                maxInput.value = max;
             }
 
-            minInput.addEventListener("input", () => {
-                const minVal = parseInt(minInput.value);
-                const maxVal = parseInt(maxInput.value);
-                // Prevent min slider from exceeding max slider value
-                if (minVal > maxVal) {
-                    minInput.value = maxVal;
-                }
-                updateTrack();
-            });
+            // Initialize min, max, step based on data attributes (sale/rent)
+            function configureRange(formType) {
+                const min = slider.dataset[`${formType}Min`];
+                const max = slider.dataset[`${formType}Max`];
+                const step = slider.dataset[`${formType}Step`];
 
-            maxInput.addEventListener("input", () => {
-                const minVal = parseInt(minInput.value);
-                const maxVal = parseInt(maxInput.value);
-                // Prevent max slider from being lower than min slider value
-                if (maxVal < minVal) {
-                    maxInput.value = minVal;
-                }
-                updateTrack();
-            });
+                minInput.min = maxInput.min = min;
+                minInput.max = maxInput.max = max;
+                minInput.step = maxInput.step = step;
 
-            // Initialize track and values on page load
+                if (
+                    !minInput.value ||
+                    isNaN(parseInt(minInput.value)) ||
+                    parseInt(minInput.value) === parseInt(maxInput.value)
+                ) {
+                    minInput.value = min;
+                    if (hiddenMinInput) hiddenMinInput.value = min;
+                }
+
+                if (
+                    !maxInput.value ||
+                    isNaN(parseInt(maxInput.value)) ||
+                    parseInt(minInput.value) === parseInt(maxInput.value)
+                ) {
+                    maxInput.value = max;
+                    if (hiddenMaxInput) hiddenMaxInput.value = max;
+                }
+
+                updateTrack();
+            }
+
+            const form = slider.closest("form");
+            const formType = form?.dataset.searchType;
+
+            if (formType === "sale" || formType === "rent") {
+                configureRange(formType);
+            }
+
+            minInput.addEventListener("input", updateTrack);
+            maxInput.addEventListener("input", updateTrack);
+
             updateTrack();
+            // console.log("Detected searchType:", form?.dataset.searchType);
         });
     }
+
+    document.addEventListener("DOMContentLoaded", initRangeSliders);
+
+    // If you use dynamic tab loading (like Bootstrap tabs), re-init on tab shown:
+    document.querySelectorAll('button[data-bs-toggle="tab"]').forEach((tab) => {
+        tab.addEventListener("shown.bs.tab", () => {
+            initRangeSliders();
+        });
+    });
 
     (function () {
         function closeAllDropdowns(except = null) {
@@ -366,55 +417,6 @@
 
     // Advanced Search
     document.addEventListener("DOMContentLoaded", () => {
-        // Advanced Search
-        const saleTab = document.getElementById("sale-tab");
-        const rentTab = document.getElementById("rent-tab");
-        const minPriceInput = document.querySelector(".rangeMin");
-        const maxPriceInput = document.querySelector(".rangeMax");
-        const minPriceValue = document.querySelector(".rangeMinValue");
-        const maxPriceValue = document.querySelector(".rangeMaxValue");
-
-        function formatPrice(value) {
-            return "£" + Number(value).toLocaleString("en-GB");
-        }
-
-        function updatePriceRange(category) {
-            if (category === "rent") {
-                minPriceInput.min = 250;
-                minPriceInput.max = 10000;
-                minPriceInput.value = 250;
-
-                maxPriceInput.min = 250;
-                maxPriceInput.max = 10000;
-                maxPriceInput.value = 3000;
-            } else if (category === "sales") {
-                minPriceInput.min = 10000;
-                minPriceInput.max = 5000000;
-                minPriceInput.value = 10000;
-
-                maxPriceInput.min = 10000;
-                maxPriceInput.max = 5000000;
-                maxPriceInput.value = 1274300;
-            }
-
-            // Update displayed values
-            minPriceValue.textContent = formatPrice(minPriceInput.value);
-            maxPriceValue.textContent = formatPrice(maxPriceInput.value);
-        }
-
-        saleTab.addEventListener("click", function () {
-            updatePriceRange("sales");
-        });
-
-        rentTab.addEventListener("click", function () {
-            updatePriceRange("rent");
-        });
-
-        // Initialize default values on page load (set to Rent initially)
-        updatePriceRange("rent");
-
-        // end advanced search
-
         document.querySelectorAll(".more-filter a").forEach((toggle) => {
             const form = toggle.closest("form");
             const wrapper = form.querySelector(".more-filters-wrapper");
