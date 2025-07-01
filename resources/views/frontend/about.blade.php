@@ -63,7 +63,7 @@
                     </p>
                 </div>
                 <a href="#callModal" class="btn btn-primary py-3 px-4 me-2" data-bs-toggle="modal"><i class="fa fa-phone-alt me-2"></i>Make A Call</a>
-                <a href="#contactModal" class="btn btn-dark py-3 px-4" data-bs-toggle="modal"><i class="fa fa-calendar-alt me-2"></i>Get Appoinment</a>
+                <a href="#contactModal" class="btn btn-dark py-3 px-4" data-bs-toggle="modal"><i class="fa fa-calendar-alt me-2"></i>Get Appointment</a>
             </div>
         </div>
     </div>
