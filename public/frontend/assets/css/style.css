@@ -419,7 +419,7 @@ body {
 .nav-bar.sticky-top {
     position: sticky;
     padding: 0;
-    z-index: 9999;
+    z-index: 10;
 }
 
 .navbar {

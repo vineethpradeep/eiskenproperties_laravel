@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('phone', 15);
+            $table->string('phone', 15)->nullable();
+            $table->text('message')->nullable();
             $table->string('status')->default('0');
             $table->unsignedBigInteger('property_id')->nullable();
             $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');

@@ -25,7 +25,7 @@
                     approach.
                 </p>
                 <p class="fw-bold">
-                    <i class="fa fa-check text-primary me-3"></i>ore than 25+ years
+                    <i class="fa fa-check text-primary me-3"></i>More than 25+ years
                     of experience
                 </p>
                 <p class="fw-bold">
@@ -62,8 +62,8 @@
                         advice, legal clarity, and trustworthy support
                     </p>
                 </div>
-                <a href="" class="btn btn-primary py-3 px-4 me-2"><i class="fa fa-phone-alt me-2"></i>Make A Call</a>
-                <a href="" class="btn btn-dark py-3 px-4"><i class="fa fa-calendar-alt me-2"></i>Get Appoinment</a>
+                <a href="#callModal" class="btn btn-primary py-3 px-4 me-2" data-bs-toggle="modal"><i class="fa fa-phone-alt me-2"></i>Make A Call</a>
+                <a href="#contactModal" class="btn btn-dark py-3 px-4" data-bs-toggle="modal"><i class="fa fa-calendar-alt me-2"></i>Get Appoinment</a>
             </div>
         </div>
     </div>
@@ -150,4 +150,65 @@
     </div>
 </div>
 <!-- Team End -->
+
+<!-- Contact Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="contactModalLabel">Reach Us</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @include('frontend.property.partials.contact_form', ['property' => $property ?? null])
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact End -->
+
+<!-- Call Modal -->
+<div class="modal fade" id="callModal" tabindex="-1" aria-labelledby="callModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="callModalLabel">Call Us</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="mb-3">For immediate support, Call us:</p>
+                <a href="tel:+441792644023" class="btn btn-success px-4 py-2">
+                    <i class="fa fa-phone-alt me-2"></i>Call +44 1792 644023
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Call Modal End -->
+
 @endsection
+<script>
+    $('#contactForm').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                toastr.success("Enquiry Sent successfully!");
+                $('#contactModal').modal('hide');
+                $('#contactForm')[0].reset();
+            },
+            error: function(xhr) {
+                let errors = xhr.responseJSON.errors;
+                Object.values(errors).forEach((error) => {
+                    toastr.error(error);
+                });
+            }
+        });
+    });
+</script>

@@ -246,37 +246,7 @@
 
                 <div class="bg-white widget-form border rounded">
                     <h3 class="h4 text-black mb-3">Contact Agent</h3>
-                    <form action="{{ route('contacts.store') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="property_id" value="{{ $property->id }}">
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <input type="text" name="name" class="form-control" id="name" placeholder="Name" autocomplete="off" required />
-                                    <label for="name">Name</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <input type="email" name="email" class="form-control" id="email" placeholder="Email" autocomplete="off" required />
-                                    <label for="email">Email</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="form-floating">
-                                    <input type="text" name="phone" class="form-control" id="phone" placeholder="Phone Number" maxlength="10" autocomplete="off" required />
-                                    <label for="phone">Phone Number</label>
-                                </div>
-                            </div>
-
-                            <div class="col-12 d-flex justify-content-end">
-                                <input type="submit" class="btn btn-primary" value="Send" />
-                            </div>
-                        </div>
-                    </form>
-
+                    @include('frontend.property.partials.contact_form', ['property' => $property])
                 </div>
 
                 <div class="bg-white widget-form border rounded">

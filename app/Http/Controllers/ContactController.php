@@ -14,10 +14,11 @@ class ContactController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'property_id' => 'required|exists:properties,id',
+            'property_id' => 'nullable|exists:properties,id',
             'name' => 'required|string|max:20',
             'email' => 'required|email|unique:contacts,email',
-            'phone' => 'required|string|max:15',
+            'phone' => 'nullable|string|max:15',
+            'message' => 'nullable|string|max:1000',
         ]);
 
         Contact::create([
@@ -25,6 +26,8 @@ class ContactController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'message' => $request->message,
+            'status' => '0',
         ]);
 
         $notification = [
