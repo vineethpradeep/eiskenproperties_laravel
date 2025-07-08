@@ -152,7 +152,7 @@
                                                 id="bedrooms" name="bedrooms" required>
                                                 <option value="" disabled selected>Select</option>
                                                 <?php
-                                                for ($i = 1; $i <= 10; $i++) {
+                                                for ($i = 1; $i <= 30; $i++) {
                                                     echo "<option value=\"$i\">$i</option>";
                                                 }
                                                 ?>
@@ -167,7 +167,7 @@
                                                 id="bathrooms" name="bathrooms" required>
                                                 <option value="" disabled selected>Select</option>
                                                 <?php
-                                                for ($i = 1; $i <= 10; $i++) {
+                                                for ($i = 1; $i <= 30; $i++) {
                                                     echo "<option value=\"$i\">$i</option>";
                                                 }
                                                 ?>
