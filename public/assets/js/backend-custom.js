@@ -59,7 +59,12 @@ $(document).ready(function () {
     $multiImageInput.on("change", function () {
         const files = Array.from(this.files);
         const input = this;
-        if (files.length > 0) $multiImgCol.show();
+        if (files.length > 0) {
+            $multiImgCol.show();
+            $multiImagedeleteBtn.prop("disabled", false);
+        } else {
+            $multiImagedeleteBtn.prop("disabled", true);
+        }
 
         // Show new uploaded image previews
         files.forEach((file, index) => {

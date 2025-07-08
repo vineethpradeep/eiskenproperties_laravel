@@ -151,11 +151,11 @@
                                                 class="form-select form-control validate-on-change"
                                                 id="bedrooms" name="bedrooms" required>
                                                 <option value="" disabled selected>Select</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
+                                                <?php
+                                                for ($i = 1; $i <= 10; $i++) {
+                                                    echo "<option value=\"$i\">$i</option>";
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -166,11 +166,11 @@
                                                 class="form-select form-control validate-on-change"
                                                 id="bathrooms" name="bathrooms" required>
                                                 <option value="" disabled selected>Select</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
+                                                <?php
+                                                for ($i = 1; $i <= 10; $i++) {
+                                                    echo "<option value=\"$i\">$i</option>";
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -186,11 +186,11 @@
                                                 class="form-select form-control validate-on-change"
                                                 id="floors" name="floors" required>
                                                 <option value="" disabled selected>Select</option>
-                                                <option value="1">1</option>
-                                                <option value="2">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="5">5</option>
+                                                <?php
+                                                for ($i = 1; $i <= 10; $i++) {
+                                                    echo "<option value=\"$i\">$i</option>";
+                                                }
+                                                ?>
                                             </select>
                                         </div>
 

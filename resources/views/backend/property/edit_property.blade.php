@@ -597,25 +597,6 @@
                         <input type="hidden" name="old_property_thumbnail_image" value="{{$property->property_thumbnail}}">
                         <div class="row row-card-no-pd mt--2">
                             <div class="col-12 col-md-12 col-lg-12 mb-3">
-                                <!-- <div class="form-group">
-                                    <label for="property_thumbnail">Main Image</label>
-                                    <input
-                                        type="file"
-                                        class="form-control validate-on-change"
-                                        name="property_thumbnail"
-                                        id="property_thumbnail"
-                                        accept="image/*"
-                                        onchange="mainThamUrl(this)" />
-
-                                    <div class="col-6 col-sm-4 flex" id="mainImgCol">
-                                        <div class="imagecheck mt-4">
-                                            <input id="mainThmbCheck" type="checkbox" class="imagecheck-input" checked>
-                                            <figure class="imagecheck-figure">
-                                                <img id="mainThmbImg" src="{{ $property->property_thumbnail ? asset($property->property_thumbnail) : 'https://placehold.co/600x400' }}" alt="Thumbnail" class="imagecheck-image" width="80" height="80">
-                                            </figure>
-                                        </div>
-                                        <button id="deleteBtn" class="btn btn-black mt-2" disabled>Delete</button>
-                                    </div> -->
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -696,45 +677,6 @@
                             <div class="row row-card-no-pd mt--2">
                                 <div class="col-12 col-md-12 col-lg-12 mb-3">
                                     <div class="form-group">
-                                        <!-- @foreach ($multiImage as $img)
-                                        <div class="form-group mb-3">
-                                            <label for="image_{{ $img->id }}">Replace Image</label>
-                                            <input type="file" name="multiple_image[{{ $img->id }}]" class="form-control">
-                                        </div>
-                                        @endforeach
-
-                                        Hidden field to store which images to delete
-                                        <input type="hidden" name="deleted_existing_images" id="deleted_existing_images" value="[]">
-                                        @php
-                                        $multiImgStyle = count($multiImage) > 0 ? '' : 'display: none;';
-                                        @endphp
-                                        <div id="multiImgCol" class="multiImgCol {{ count($multiImage) === 0 ? 'd-none' : '' }}">
-                                            <div id="previewContainer" class="row mt-3">
-                                                @foreach ($multiImage as $index => $img)
-                                                <div class="col-6 col-sm-4 mb-3 existing-image">
-                                                    <label class="imagecheck w-100">
-                                                        <input
-                                                            type="checkbox"
-                                                            class="imagecheck-input"
-                                                            data-existing="true"
-                                                            data-index="{{ $index }}"
-                                                            data-filename="{{ $img->image }}" />
-                                                        <figure class="imagecheck-figure">
-                                                            <img src="{{ asset($img->image) }}" alt="Thumbnail" class="imagecheck-image" width="100%">
-                                                        </figure>
-                                                    </label>
-                                                </div>
-                                                @endforeach
-                                            </div>
-
-                                            <button
-                                                type="button"
-                                                class="btn btn-black mt-2"
-                                                id="multiImagedeleteBtn"
-                                                disabled>
-                                                Delete
-                                            </button>
-                                        </div> -->
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
