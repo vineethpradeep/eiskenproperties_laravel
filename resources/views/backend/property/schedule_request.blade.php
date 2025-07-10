@@ -44,7 +44,7 @@
                                     <span class="badge badge-warning">Pending</span>
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-nowrap">
                                     <a href="{{route('property.view.schedule', $item->id)}}"
                                         class="btn btn-secondary" title="View Request Details"><i class="fa fa-eye"></i></a>
                                     <a href="{{route('delete.schedule', $item->id)}}"

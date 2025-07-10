@@ -57,7 +57,7 @@
                                 </td>
                                 <td>{{ $user->address }}</td>
                                 <td>@if($user->status == "active") <span class="badge badge-success">Active</span> @else <span class="badge badge-danger">Inactive</span> @endif</td>
-                                <td>
+                                <td class="text-nowrap">
                                     <a href="{{route('details.property', $user->id)}}"
                                         class="btn btn-secondary" title="Property Details"><i class="fa fa-eye"></i></a>
                                     <a href="{{route('delete.property', $user->id)}}"

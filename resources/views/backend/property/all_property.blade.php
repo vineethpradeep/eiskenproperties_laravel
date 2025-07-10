@@ -52,7 +52,7 @@
 
                                 <td>{{ $item->property_code }}</td>
                                 <td>@if($item->status == 1) <span class="badge badge-success">Active</span> @else <span class="badge badge-danger">Inactive</span> @endif</td>
-                                <td>
+                                <td class="text-nowrap">
                                     <a href="{{route('details.property', $item->id)}}"
                                         class="btn btn-secondary" title="Property Details"><i class="fa fa-eye"></i></a>
                                     <a href="{{route('edit.property', $item->id)}}"
