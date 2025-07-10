@@ -87,6 +87,18 @@ $(document).ready(function () {
     });
 
     $multiImageInput.on("change", function () {
+        const over = Array.from(this.files).filter(
+            (f) => f.size > 10 * 1024 * 1024
+        );
+        if (over.length) {
+            Swal.fire(
+                "Error",
+                "Please choose images under 10 MB each.",
+                "error"
+            );
+            this.value = "";
+            $("#previewContainer").empty();
+        }
         const files = Array.from(this.files);
         $previewContainer.empty();
 
