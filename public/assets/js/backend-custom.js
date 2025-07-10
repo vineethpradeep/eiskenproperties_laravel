@@ -36,14 +36,34 @@ $(document).ready(function () {
     };
 
     $("#property_thumbnail").on("change", function () {
-        if (this.files.length > 0) {
-            $(this)
-                .removeClass("is-invalid")
-                .closest(".form-group")
-                .find("span.invalid-feedback")
-                .remove();
-            $(this).valid();
+        const file = this.files[0];
+
+        if (!file) return;
+
+        const maxSize = 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+            Swal.fire(
+                "File Too Large",
+                "Main image must be under 10 MB.",
+                "error"
+            ).then(() => {
+                $(this).val("");
+                updateMainImageUI("https://placehold.co/600x400");
+                $mainThmbCheck.prop("checked", false);
+                $deleteBtn.prop("disabled", true).hide();
+            });
+            return;
         }
+
+        // Valid file — show preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            updateMainImageUI(e.target.result);
+            $existingImage.val(""); // Clear hidden field if new image
+            $mainThmbCheck.prop("checked", true);
+            $deleteBtn.prop("disabled", false).show();
+        };
+        reader.readAsDataURL(file);
     });
 
     $(".validate-on-change").on("change input", function () {

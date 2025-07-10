@@ -107,8 +107,7 @@
                                         class="form-control validate-on-change"
                                         name="property_thumbnail"
                                         id="property_thumbnail"
-                                        accept="image/*"
-                                        onchange="mainThamUrl(this)" />
+                                        accept="image/*" />
 
                                     <div class="col-6 col-sm-4" id="mainImgCol">
                                         <label class="imagecheck mt-4">
