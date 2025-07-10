@@ -69,12 +69,12 @@
             <ul class="nav nav-collapse">
               <li>
                 <a href="{{route('all.property_type')}}">
-                  <span class="sub-item">All Propeertie Type</span>
+                  <span class="sub-item">All Property Type</span>
                 </a>
               </li>
               <li>
                 <a href="{{route('add.property_type')}}">
-                  <span class="sub-item">Add Propertie Type</span>
+                  <span class="sub-item">Add Property Type</span>
                 </a>
               </li>
             </ul>

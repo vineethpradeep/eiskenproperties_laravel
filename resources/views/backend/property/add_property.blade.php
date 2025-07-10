@@ -147,33 +147,47 @@
                                     <div class="col-6 mb-2">
                                         <div class="form-group">
                                             <label for="bedrooms">Bedrooms</label>
-                                            <select
-                                                class="form-select form-control validate-on-change"
-                                                id="bedrooms" name="bedrooms" required>
-                                                <option value="" disabled selected>Select</option>
-                                                <?php
-                                                for ($i = 1; $i <= 30; $i++) {
-                                                    echo "<option value=\"$i\">$i</option>";
-                                                }
-                                                ?>
-                                            </select>
+                                            <input
+                                                list="bedroomOptions"
+                                                type="number"
+                                                min="1"
+                                                class="form-control validate-on-change"
+                                                id="bedrooms"
+                                                name="bedrooms"
+                                                placeholder="Select or type number"
+                                                required />
+
+                                            <datalist id="bedroomOptions">
+                                                <?php for ($i = 1; $i <= 30; $i++): ?>
+                                                    <option value="<?= $i ?>"></option>
+                                                <?php endfor; ?>
+                                            </datalist>
                                         </div>
                                     </div>
+
                                     <div class="col-6 mb-2">
                                         <div class="form-group">
                                             <label for="bathrooms">Bathrooms</label>
-                                            <select
-                                                class="form-select form-control validate-on-change"
-                                                id="bathrooms" name="bathrooms" required>
-                                                <option value="" disabled selected>Select</option>
-                                                <?php
-                                                for ($i = 1; $i <= 30; $i++) {
-                                                    echo "<option value=\"$i\">$i</option>";
-                                                }
-                                                ?>
-                                            </select>
+
+                                            <!-- Input with datalist suggestions 1–30 -->
+                                            <input
+                                                list="bathroomOptions"
+                                                type="number"
+                                                min="1"
+                                                class="form-control validate-on-change"
+                                                id="bathrooms"
+                                                name="bathrooms"
+                                                placeholder="Select or type number"
+                                                required />
+
+                                            <datalist id="bathroomOptions">
+                                                <?php for ($i = 1; $i <= 30; $i++): ?>
+                                                    <option value="<?= $i ?>"></option>
+                                                <?php endfor; ?>
+                                            </datalist>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -182,19 +196,23 @@
                                     <div class="col-6 mb-2">
                                         <div class="form-group">
                                             <label for="floors">Floors</label>
-                                            <select
-                                                class="form-select form-control validate-on-change"
-                                                id="floors" name="floors" required>
-                                                <option value="" disabled selected>Select</option>
-                                                <?php
-                                                for ($i = 1; $i <= 10; $i++) {
-                                                    echo "<option value=\"$i\">$i</option>";
-                                                }
-                                                ?>
-                                            </select>
+                                            <input
+                                                list="floorOptions"
+                                                type="number"
+                                                min="1"
+                                                class="form-control validate-on-change"
+                                                id="floors"
+                                                name="floors"
+                                                placeholder="Select or type number"
+                                                required />
+                                            <datalist id="floorOptions">
+                                                <?php for ($i = 1; $i <= 10; $i++): ?>
+                                                    <option value="<?= $i ?>"></option>
+                                                <?php endfor; ?>
+                                            </datalist>
                                         </div>
-
                                     </div>
+
                                     <div class="col-6 mb-2">
                                         <div class="form-group">
                                             <label for="property_size">Property Size</label>
