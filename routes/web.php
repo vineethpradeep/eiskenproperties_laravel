@@ -27,6 +27,9 @@ Route::get('/check-env-file', function () {
     return file_exists(base_path('.env')) ? 'YES - .env exists' : 'NO - .env not found';
 });
 
+Route::get('/check-env-host', function () {
+    return env('DB_HOST') ? 'Yes - environment variables are loaded' : 'No - environment variables not found';
+});
 
 //User frontend routes
 Route::get('/', [UserController::class, 'Index']);
