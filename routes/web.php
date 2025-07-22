@@ -23,6 +23,11 @@ Route::get('/debug-db', function () {
     return config('database.connections.pgsql');
 });
 
+Route::get('/check-env-file', function () {
+    return file_exists(base_path('.env')) ? 'YES - .env exists' : 'NO - .env not found';
+});
+
+
 //User frontend routes
 Route::get('/', [UserController::class, 'Index']);
 
