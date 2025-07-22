@@ -31,11 +31,20 @@ Route::get('/check-env-host', function () {
     return env('DB_HOST') ? 'Yes - environment variables are loaded' : 'No - environment variables not found';
 });
 
+
+Route::get('/fix-env', function () {
+    \Artisan::call('config:clear');
+    \Artisan::call('cache:clear');
+    return 'Laravel config & cache cleared';
+});
+
 Route::get('/env-audit', function () {
     return [
         'DB_CONNECTION' => env('DB_CONNECTION'),
         'DB_HOST' => env('DB_HOST'),
         'DB_DATABASE' => env('DB_DATABASE'),
+        'DB_USER' => env('DB_USERNAME'),
+        'From Config' => config('database.connections.pgsql'),
     ];
 });
 
