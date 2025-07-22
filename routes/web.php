@@ -32,11 +32,14 @@ Route::get('/check-env-host', function () {
 });
 
 
-Route::get('/fix-env', function () {
-    \Artisan::call('config:clear');
-    \Artisan::call('cache:clear');
-    return 'Laravel config & cache cleared';
+Route::get('/clear-all', function () {
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    return 'Cache cleared and rebuilt!';
 });
+
 
 Route::get('/env-audit', function () {
     return [
