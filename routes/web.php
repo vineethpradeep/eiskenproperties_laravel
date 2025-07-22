@@ -31,6 +31,15 @@ Route::get('/check-env-host', function () {
     return env('DB_HOST') ? 'Yes - environment variables are loaded' : 'No - environment variables not found';
 });
 
+Route::get('/env-audit', function () {
+    return [
+        'DB_CONNECTION' => env('DB_CONNECTION'),
+        'DB_HOST' => env('DB_HOST'),
+        'DB_DATABASE' => env('DB_DATABASE'),
+    ];
+});
+
+
 Route::get('/db-health', function () {
     try {
         \DB::connection()->getPdo();
