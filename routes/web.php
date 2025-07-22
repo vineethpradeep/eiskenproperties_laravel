@@ -19,6 +19,10 @@ use App\Models\User;
 //     return view('welcome');
 // });
 
+Route::get('/debug-db', function () {
+    return config('database.connections.pgsql');
+});
+
 //User frontend routes
 Route::get('/', [UserController::class, 'Index']);
 
