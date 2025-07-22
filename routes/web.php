@@ -31,6 +31,16 @@ Route::get('/check-env-host', function () {
     return env('DB_HOST') ? 'Yes - environment variables are loaded' : 'No - environment variables not found';
 });
 
+Route::get('/db-health', function () {
+    try {
+        \DB::connection()->getPdo();
+        return 'DB connection is healthy.';
+    } catch (\Exception $e) {
+        return 'DB connection error: ' . $e->getMessage();
+    }
+});
+
+
 //User frontend routes
 Route::get('/', [UserController::class, 'Index']);
 
