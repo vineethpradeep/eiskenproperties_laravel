@@ -20,15 +20,16 @@
                         class="display table table-striped table-hover">
                         <thead>
                             <tr>
-                                <th>Sl</th>
+                                <th>Code</th>
                                 <th>Name</th>
                                 <th>Images</th>
-                                <th>Code</th>
-                                <th>Status Type</th>
-                                <th>City</th>
+                                <th>F-Type</th>
+                                <th>Band</th>
+                                <th>Available Date</th>
+                                <th>Address</th>
                                 <th>P-Type</th>
                                 <th>Rent</th>
-                                <th>Code</th>
+                                <th>Rent/Sales</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -37,20 +38,21 @@
                         <tbody>
                             @foreach ($properties as $key => $item)
                             <tr>
-                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $item->property_code }}</td>
                                 <td>{{ $item->property_name }}</td>
                                 <td>
                                     <img src="{{ asset($item->property_thumbnail ?: 'https://bbxtbqstyfhfjybywyya.supabase.co/storage/v1/object/public/uploads/default-image/default_multi_image.jpg' ) }}" alt="{{ $item->property_name }}" style="width: 60px; height: 40px">
                                 </td>
-                                <td>{{ $item->property_code }}</td>
+                                <td>{{ $item->furnishing }}</td>
                                 <td>
-                                    {{ $item->property_status}}
+                                    E-({{ $item->epc}}) / C-({{ $item->council_band}})
                                 </td>
-                                <td>{{ $item->city }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->availabilityDate)->format('d/m/Y') }}</td>
+                                <td>{{ $item->street }}</td>
                                 <td>{{ $item['propertyType']['property_type_name'] }}</td>
                                 <td>{{ $item->rent }}</td>
 
-                                <td>{{ $item->property_code }}</td>
+                                <td>To {{ $item->property_category }}</td>
                                 <td>@if($item->status == 1) <span class="badge badge-success">Active</span> @else <span class="badge badge-danger">Inactive</span> @endif</td>
                                 <td class="text-nowrap">
                                     <a href="{{route('details.property', $item->id)}}"
