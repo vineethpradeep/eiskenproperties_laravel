@@ -47,7 +47,13 @@
                                 <td>
                                     E-({{ $item->epc}}) / C-({{ $item->council_band}})
                                 </td>
-                                <td>{{ \Carbon\Carbon::parse($item->availabilityDate)->format('d/m/Y') }}</td>
+                                <td>
+                                    @if($item->status == 1)
+                                    {{ \Carbon\Carbon::parse($item->availabilityDate)->format('d/m/Y') }}
+                                    @else
+                                    Not Available
+                                    @endif
+                                </td>
                                 <td>{{ $item->street }}</td>
                                 <td>{{ $item['propertyType']['property_type_name'] }}</td>
                                 <td>{{ $item->rent }}</td>
