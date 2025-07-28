@@ -45,8 +45,10 @@
                                 </td>
                                 <td>{{ $item->furnishing }}</td>
                                 <td>
-                                    E-({{ $item->epc}}) / C-({{ $item->council_band}})
+                                    E-({{ $item->epc ? $item->epc : 'N/A' }}) /
+                                    C-({{ $item->council_band ? $item->council_band : 'N/A' }})
                                 </td>
+
                                 <td>
                                     @if($item->status == 1)
                                     {{ \Carbon\Carbon::parse($item->availabilityDate)->format('d/m/Y') }}

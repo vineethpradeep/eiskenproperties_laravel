@@ -117,7 +117,7 @@
                         Swal.fire({
                             icon: 'warning',
                             title: 'Login Required',
-                            text: 'Please login to use wishlist!',
+                            text: 'Please log in to use the Wishlist for property inquiries and tracking.',
                             confirmButtonText: 'OK'
                         });
                         throw new Error('Unauthenticated');
@@ -151,7 +151,7 @@
             Swal.fire({
                 icon: 'warning',
                 title: 'Login Required',
-                text: 'Please login to use wishlist!',
+                text: 'Please log in to use the Wishlist for property inquiries and tracking.',
                 confirmButtonText: 'Login',
             }).then((result) => {
                 if (result.isConfirmed) {
