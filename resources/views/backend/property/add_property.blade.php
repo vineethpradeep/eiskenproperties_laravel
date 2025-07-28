@@ -19,7 +19,7 @@
                                                 name="property_category"
                                                 value="rent"
                                                 class="selectgroup-input validate-on-change"
-                                                checked="" />
+                                                checked />
                                             <span class="selectgroup-button">Rent</span>
                                         </label>
                                         <label class="selectgroup-item">
@@ -32,7 +32,6 @@
                                         </label>
                                     </div>
                                 </div>
-
                             </div>
 
                             <div class="col-12 col-md-4 col-lg-4 mb-3">
@@ -63,37 +62,37 @@
                             </div>
                         </div>
                         <div class="row row-card-no-pd mt--2">
-                            <div class="col-12 col-md-4 col-lg-4 mb-3">
+                            <div class="col-12 col-md-4 col-lg-4 mb-3" id="rentDepositSection">
                                 <div class="row">
                                     <div class="col-6 mb-2">
                                         <div class="form-group">
-                                            <label class="form-label" for="rent">Rent</label>
+                                            <label for="rent">Rent</label>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">£</span>
-                                                <input
-                                                    type="text"
-                                                    class="form-control validate-on-change"
-                                                    name="rent"
-                                                    id="rent"
-                                                    aria-label="Amount (to the nearest dollar)" />
+                                                <input type="text" class="form-control" name="rent" id="rent" />
                                                 <span class="input-group-text">.00</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-6 mb-2">
                                         <div class="form-group">
-                                            <label class="form-label" for="deposit">Deposit</label>
+                                            <label for="deposit">Deposit</label>
                                             <div class="input-group mb-3">
                                                 <span class="input-group-text">£</span>
-                                                <input
-                                                    type="text"
-                                                    class="form-control validate-on-change"
-                                                    name="deposit"
-                                                    id="deposit"
-                                                    aria-label="Amount (to the nearest dollar)" />
+                                                <input type="text" class="form-control" name="deposit" id="deposit" />
                                                 <span class="input-group-text">.00</span>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4 col-lg-4 mb-3" id="priceSection" style="display: none;">
+                                <div class="form-group">
+                                    <label for="price">Price</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text">£</span>
+                                        <input type="text" class="form-control" name="price" id="price" />
+                                        <span class="input-group-text">.00</span>
                                     </div>
                                 </div>
                             </div>
@@ -218,7 +217,7 @@
                                             <input
                                                 type="nunber"
                                                 class="form-control validate-on-change"
-                                                id="property_size" name="property_size" required />
+                                                id="property_size" name="property_size" />
                                         </div>
 
                                     </div>
@@ -233,7 +232,7 @@
                                             <label for="epc">EPC</label>
                                             <select
                                                 class="form-select form-control validate-on-change"
-                                                id="epc" name="epc" required>
+                                                id="epc" name="epc">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="A">A</option>
                                                 <option value="B">B</option>
@@ -251,7 +250,7 @@
                                             <label for="council_band">Council Tax Band</label>
                                             <select
                                                 class="form-select form-control validate-on-change"
-                                                id="council_band" name="council_band" required>
+                                                id="council_band" name="council_band">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="A">A</option>
                                                 <option value="B">B</option>
@@ -657,6 +656,13 @@
                 deposit: {
                     required: false,
                 },
+                price: {
+                    required: function() {
+                        let propertyCategory = $('input[name="property_category"]:checked').val();
+                        return propertyCategory === 'sale';
+                    },
+                    digits: true
+                },
                 property_thumbnail: {
                     required: function() {
                         let existingImage = $('#existing_image').val().trim();
@@ -679,16 +685,13 @@
                     required: false
                 },
                 property_size: {
-                    required: true
-                },
-                council_band: {
-                    required: true
+                    required: false
                 },
                 epc: {
-                    required: true
+                    required: false
                 },
                 council_band: {
-                    required: true
+                    required: false
                 },
                 postcodeInput: {
                     required: true
@@ -738,9 +741,6 @@
                 property_size: {
                     required: "Please enter property size"
                 },
-                council_band: {
-                    required: "Please enter council band"
-                },
                 epc: {
                     required: "Please enter epc"
                 },
@@ -772,5 +772,42 @@
             }
         });
     })
+    document.addEventListener('DOMContentLoaded', function() {
+        const rentDepositSection = document.getElementById('rentDepositSection');
+        const priceSection = document.getElementById('priceSection');
+        const categoryRadios = document.querySelectorAll('input[name="property_category"]');
+
+        function toggleFields() {
+            const selectedCategory = document.querySelector('input[name="property_category"]:checked').value;
+
+            if (selectedCategory === 'rent') {
+                rentDepositSection.style.display = 'block';
+                priceSection.style.display = 'none';
+
+                document.getElementById('price').value = '';
+                document.getElementById('price').removeAttribute('required');
+
+                document.getElementById('rent').setAttribute('required', 'required');
+                document.getElementById('deposit').setAttribute('required', 'required');
+            } else {
+                rentDepositSection.style.display = 'none';
+                priceSection.style.display = 'block';
+
+                document.getElementById('rent').value = '';
+                document.getElementById('deposit').value = '';
+                document.getElementById('rent').removeAttribute('required');
+                document.getElementById('deposit').removeAttribute('required');
+
+                document.getElementById('price').setAttribute('required', 'required');
+            }
+        }
+
+        categoryRadios.forEach(radio => {
+            radio.addEventListener('change', toggleFields);
+        });
+
+        // Initial toggle on page load
+        toggleFields();
+    });
 </script>
 @endsection

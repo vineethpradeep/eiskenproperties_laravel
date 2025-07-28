@@ -41,7 +41,12 @@
     </div>
 
     <div class="p-4 pb-0">
+        @if($property->property_category === 'rent')
         <h5 class="text-primary mb-3 mt-2">£{{ number_format($property->rent) }}</h5>
+        @elseif($property->property_category === 'sales')
+        <h5 class="text-primary mb-3 mt-2">£{{ number_format($property->price) }}</h5>
+        @endif
+
         <a class="d-block h5 mb-2" href="{{ url('property/details/' . $property->id . '/' . $property->property_slug) }}">
             {{ $property->property_name }}
         </a>

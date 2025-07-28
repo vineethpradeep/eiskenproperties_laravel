@@ -28,7 +28,7 @@
                                 <th>Available Date</th>
                                 <th>Address</th>
                                 <th>P-Type</th>
-                                <th>Rent</th>
+                                <th>Price</th>
                                 <th>Rent/Sales</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -56,7 +56,16 @@
                                 </td>
                                 <td>{{ $item->street }}</td>
                                 <td>{{ $item['propertyType']['property_type_name'] }}</td>
-                                <td>{{ $item->rent }}</td>
+                                <td>
+                                    @if($item->property_category === 'rent' && $item->rent)
+                                    £{{ number_format($item->rent) }}
+                                    @elseif($item->property_category === 'sales' && $item->price)
+                                    £{{ number_format($item->price) }}
+                                    @else
+                                    N/A
+                                    @endif
+                                </td>
+
 
                                 <td>To {{ $item->property_category }}</td>
                                 <td>@if($item->status == 1) <span class="badge badge-success">Active</span> @else <span class="badge badge-danger">Inactive</span> @endif</td>

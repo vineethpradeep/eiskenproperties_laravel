@@ -43,7 +43,12 @@
                     class="bg-white property-body border-bottom border-left border-right">
                     <div class="row mb-5">
                         <div class="col-md-12">
-                            <strong class="text-primary h1 mb-3">£{{$property->rent}}</strong>
+                            @if($property->property_category === 'rent' && $property->rent)
+                            <strong class="text-primary h1 mb-3">£{{ number_format($property->rent) }}</strong>
+                            @elseif($property->property_category === 'sales' && $property->price)
+                            <strong class="text-primary h1 mb-3">£{{ number_format($property->price) }}</strong>
+                            @endif
+
                             <h1 class="address">
                                 {{$property->property_name}},
                                 <address>

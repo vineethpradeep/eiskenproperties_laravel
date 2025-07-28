@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('furnishing');
             $table->string('deposit')->nullable();
             $table->unsignedInteger('rent')->nullable();
+            $table->unsignedInteger('price')->nullable();
             $table->string('property_thumbnail')->nullable();
             $table->text('description')->nullable();
             $table->string('bedrooms')->nullable();
