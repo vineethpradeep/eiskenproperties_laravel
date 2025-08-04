@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PropertyType;
 use App\Models\Amenities;
+use App\Models\Feature;
 use PhpParser\Builder\Property;
 
 class PropertyTypeController extends Controller
@@ -136,6 +137,69 @@ class PropertyTypeController extends Controller
         Amenities::findOrFail($id)->delete();
         $notification = [
             'message' => 'Property Amenitie Deleted Successfully',
+            'alert-type' => 'info',
+        ];
+        return redirect()->back()->with($notification);
+    }
+
+    public function AllFeatures()
+    {
+        $features = Feature::latest()->get();
+        return view('backend.features.all_features', compact('features'));
+    }
+
+    public function AddFeature()
+    {
+        return view('backend.features.add_feature');
+    }
+
+    public function StoreFeature(Request $request)
+    {
+        $request->validate([
+            'feature_name' => 'required',
+        ]);
+
+        Feature::insert([
+            'feature_name' => $request->feature_name,
+        ]);
+
+        $notification = [
+            'message' => 'Property Feature Created Successfully',
+            'alert-type' => 'success',
+        ];
+
+        return redirect()->route('all.features')->with($notification);
+    }
+
+    public function EditFeature($id)
+    {
+        $feature = Feature::findOrFail($id);
+        return view('backend.features.edit_feature', compact('feature'));
+    }
+
+    public function UpdateFeature(Request $request)
+    {
+        $request->validate([
+            'feature_name' => 'required',
+        ]);
+
+        Feature::findOrFail($request->id)->update([
+            'feature_name' => $request->feature_name,
+        ]);
+
+        $notification = [
+            'message' => 'Property Feature Updated Successfully',
+            'alert-type' => 'success',
+        ];
+
+        return redirect()->route('all.features')->with($notification);
+    }
+
+    public function DeleteFeature($id)
+    {
+        Feature::findOrFail($id)->delete();
+        $notification = [
+            'message' => 'Property Feature Deleted Successfully',
             'alert-type' => 'info',
         ];
         return redirect()->back()->with($notification);

@@ -128,6 +128,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::post('/update/amenitie', 'UpdateAmenitie')->name('update.amenitie');
         Route::get('/delete/amenitie/{id}', 'DeleteAmenitie')->name('delete.amenitie');
     });
+    Route::controller(PropertyTypeController::class)->group(function () {
+        Route::get('/all/features', 'AllFeatures')->name('all.features');
+        Route::get('/add/feature', 'AddFeature')->name('add.feature');
+        Route::post('/store/feature', 'StoreFeature')->name('store.feature');
+        Route::get('/edit/feature/{id}', 'EditFeature')->name('edit.feature');
+        Route::post('/update/feature', 'UpdateFeature')->name('update.feature');
+        Route::get('/delete/feature/{id}', 'DeleteFeature')->name('delete.feature');
+    });
     Route::controller(PropertyController::class)->group(function () {
         Route::get('/all/property', 'AllProperty')->name('all.property');
         Route::get('/add/property', 'AddProperty')->name('add.property');

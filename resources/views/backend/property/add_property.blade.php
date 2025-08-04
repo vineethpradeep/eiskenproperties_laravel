@@ -268,7 +268,7 @@
                             <div class="col-12 col-md-6 col-lg-6 mb-3">
                                 <div class="form-group">
                                     <label class="form-label d-block">Property Features</label>
-                                    <div class="selectgroup selectgroup-pills scrollable-box">
+                                    <!-- <div class="selectgroup selectgroup-pills scrollable-box">
                                         <label class="selectgroup-item">
                                             <input
                                                 type="checkbox"
@@ -309,6 +309,18 @@
                                                 class="selectgroup-input" />
                                             <span class="selectgroup-button">Bike Parking</span>
                                         </label>
+                                    </div> -->
+                                    <div class="selectgroup selectgroup-pills scrollable-box">
+                                        @foreach ($features as $feature)
+                                        <label class="selectgroup-item">
+                                            <input
+                                                type="checkbox"
+                                                name="features_id[]"
+                                                value="{{ $feature->id }}"
+                                                class="selectgroup-input" />
+                                            <span class="selectgroup-button">{{ $feature->feature_name }}</span>
+                                        </label>
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>

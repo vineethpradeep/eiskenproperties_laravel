@@ -83,7 +83,7 @@
         <li class="nav-item">
           <a data-bs-toggle="collapse" href="#forms">
             <i class="fas fa-pen-square"></i>
-            <p>Add Amenities</p>
+            <p>Amenities</p>
             <span class="caret"></span>
           </a>
           <div class="collapse" id="forms">
@@ -96,6 +96,27 @@
               <li>
                 <a href="{{route('add.amenitie')}}">
                   <span class="sub-item">Add Amenitie</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#features_Forms">
+            <i class="fas fa-pen-square"></i>
+            <p>Features</p>
+            <span class="caret"></span>
+          </a>
+          <div class="collapse" id="features_Forms">
+            <ul class="nav nav-collapse">
+              <li>
+                <a href="{{route('all.features')}}">
+                  <span class="sub-item">All Features</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{route('add.feature')}}">
+                  <span class="sub-item">Add Features</span>
                 </a>
               </li>
             </ul>
