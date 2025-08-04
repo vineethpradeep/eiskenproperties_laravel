@@ -4,8 +4,7 @@ use App\Models\Wishlist;
 
 $properties = App\Models\Property::with('propertyType')
 ->where('status', '1')
-->whereNotNull('features_id')
-->where('features_id', '!=', '')
+->whereNotNull('featured')
 ->latest()
 ->limit(3)
 ->get();
@@ -18,7 +17,6 @@ $userWishlist = Wishlist::where('user_id', Auth::id())
 ->toArray();
 }
 @endphp
-
 
 <div class="container-xxl py-5">
     <div class="container">
