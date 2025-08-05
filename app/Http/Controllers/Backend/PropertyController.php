@@ -49,6 +49,8 @@ class PropertyController extends Controller
 
         $amenitiesId = $request->amenities_id;
         $amenities = implode(',', $amenitiesId);
+        $featuresId = $request->features_id;
+        $features = implode(',', $featuresId);
         $pcode = IdGenerator::generate(['table' => 'properties', 'field' => 'property_code', 'length' => 6, 'prefix' => 'EP-']);
         $file = $request->file('property_thumbnail');
         $saveUrl = null;
@@ -73,6 +75,7 @@ class PropertyController extends Controller
         $propertyData = [
             'ptype_id' => $request->ptype_id,
             'amenities_id' => $amenities,
+            'features_id' => $features,
             'property_name' => $request->property_name,
             'property_category' => $request->property_category,
             'property_slug' => strtolower(str_replace(' ', '-', $request->property_name)),
@@ -180,6 +183,7 @@ class PropertyController extends Controller
 
         $propertyType = PropertyType::latest()->get();
         $amenities = Amenities::latest()->get();
+        $features = Feature::latest()->get();
         $activeAgents = User::where('role', 'agent')->where('status', 'active')->latest()->get();
 
         $notification = [
@@ -188,18 +192,21 @@ class PropertyController extends Controller
         ];
 
 
-        return view('backend.property.edit_property', compact('property', 'propertyType', 'amenities', 'activeAgents', 'amenities_type', 'multiImage'));
+        return view('backend.property.edit_property', compact('property', 'propertyType', 'amenities', 'features', 'activeAgents', 'amenities_type', 'multiImage'));
     }
 
     public function UpdateProperty(Request $request)
     {
         $amenitiesId = $request->amenities_id;
         $amenities = implode(',', $amenitiesId);
+        $featuresId = $request->features_id;
+        $features = implode(',', $featuresId);
 
         $property_id = $request->id;
         Property::findOrFail($property_id)->update([
             'ptype_id' => $request->ptype_id,
             'amenities_id' => $amenities,
+            'features_id' => $features,
             'property_name' => $request->property_name,
             'property_category' => $request->property_category,
             'property_slug' => strtolower(str_replace(' ', '-', $request->property_name)),
