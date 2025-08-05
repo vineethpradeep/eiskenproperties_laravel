@@ -46,9 +46,6 @@ class PropertyController extends Controller
 
     public function StoreProperty(Request $request)
     {
-        // Optional: remove this after testing
-        // dd($request->all());
-
         // Handle optional multi-select inputs
         $amenitiesId = $request->input('amenities_id', []);
         $featuresId = $request->input('features_id', []);
@@ -172,8 +169,10 @@ class PropertyController extends Controller
     {
         $property = Property::findOrFail($id);
 
-        $amenitieTags = $property->amenities_id;
-        $amenities_type = explode(',', $amenitieTags);
+        // Handle null or empty amenities_id safely
+        $amenitieTags = $property->amenities_id ?? '';
+        $amenities_type = !empty($amenitieTags) ? explode(',', $amenitieTags) : [];
+
         $multiImage = MultiImage::where('property_id', $id)->get();
 
         $propertyType = PropertyType::latest()->get();
@@ -181,23 +180,32 @@ class PropertyController extends Controller
         $features = Feature::latest()->get();
         $activeAgents = User::where('role', 'agent')->where('status', 'active')->latest()->get();
 
-        $notification = [
-            'message' => 'Property Added Successfully',
-            'alert-type' => 'success',
-        ];
+        // $featureTags = $property->features_id ?? '';
+        // $features_type = !empty($featureTags) ? explode(',', $featureTags) : [];
 
-
-        return view('backend.property.edit_property', compact('property', 'propertyType', 'amenities', 'features', 'activeAgents', 'amenities_type', 'multiImage'));
+        return view('backend.property.edit_property', compact(
+            'property',
+            'propertyType',
+            'amenities',
+            'features',
+            'activeAgents',
+            'amenities_type',
+            'multiImage'
+        ));
     }
+
 
     public function UpdateProperty(Request $request)
     {
-        $amenitiesId = $request->amenities_id;
-        $amenities = implode(',', $amenitiesId);
-        $featuresId = $request->features_id;
-        $features = implode(',', $featuresId);
+        // Gracefully handle missing or null checkbox/multi-select inputs
+        $amenitiesId = $request->input('amenities_id', []);
+        $featuresId = $request->input('features_id', []);
+
+        $amenities = implode(',', (array) $amenitiesId);
+        $features = implode(',', (array) $featuresId);
 
         $property_id = $request->id;
+
         Property::findOrFail($property_id)->update([
             'ptype_id' => $request->ptype_id,
             'amenities_id' => $amenities,
@@ -208,12 +216,12 @@ class PropertyController extends Controller
             'property_status' => $request->property_status,
             'furnishing' => $request->furnishing,
             'deposit' => $request->deposit ?? 0,
-            'rent' => $request->rent,
-            'price' => $request->price,
+            'rent' => $request->rent ?? 0,
+            'price' => $request->price ?? 0,
             'description' => $request->description,
-            'bedrooms' => $request->bedrooms,
-            'bathrooms' => $request->bathrooms,
-            'floors' => $request->floors,
+            'bedrooms' => $request->bedrooms ?? 0,
+            'bathrooms' => $request->bathrooms ?? 0,
+            'floors' => $request->floors ?? 0,
             'condition' => $request->condition,
             'epc' => $request->epc,
             'availabilityDate' => $request->availabilityDate,
@@ -236,7 +244,7 @@ class PropertyController extends Controller
             'featured' => $request->featured,
             'hot' => $request->hot,
             'agent_id' => $request->agent_id,
-            'updated_at' => Carbon::now(),
+            'updated_at' => now(),
         ]);
 
         $notification = [
@@ -246,6 +254,7 @@ class PropertyController extends Controller
 
         return redirect()->route('all.property')->with($notification);
     }
+
 
     public function UpdatePropertyThumbnail(Request $request)
     {
