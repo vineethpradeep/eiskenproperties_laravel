@@ -28,12 +28,23 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (App::runningInConsole()) {
-            return; // Skip all DB-related logic during CLI operations (e.g. build scripts)
-        }
-
         View::composer('*', function ($view) {
-            // Protect against DB connection issues
+            $data = [
+                'requestView' => collect(),
+                'pendingCount' => 0,
+                'inActiveUser' => collect(),
+                'totalCount' => 0,
+                'activeUsers' => collect(),
+                'allUserCount' => 0,
+                'totalViewingRequests' => 0,
+                'acceptedView' => 0,
+                'todayRequests' => collect(),
+                'propertyRequests' => collect(),
+                'totalEnquiries' => 0,
+                'pendingEnquiries' => 0,
+                'contactsData' => collect(),
+            ];
+
             try {
                 if (
                     Schema::hasTable('property_viewings') &&
@@ -41,56 +52,41 @@ class ViewServiceProvider extends ServiceProvider
                     Schema::hasTable('properties') &&
                     Schema::hasTable('contacts')
                 ) {
-                    $propertyRequests = PropertyViewing::select('property_id', DB::raw('count(*) as request_count'))
+                    $data['propertyRequests'] = PropertyViewing::select('property_id', DB::raw('count(*) as request_count'))
                         ->groupBy('property_id')
                         ->with('property')
                         ->get();
 
-                    $inActiveUser = User::where('status', 'active')->whereIn('role', ['user', 'agent'])->get();
-                    $allUserCount = User::whereIn('role', ['user', 'agent'])->count();
-                    $requestView = PropertyViewing::with('property', 'user')->latest()->get();
-                    $pendingCount = PropertyViewing::where('status', 0)->count();
-                    $acceptedView = PropertyViewing::where('status', 1)->count();
-                    $todayRequests = PropertyViewing::with('property', 'user')
+                    $data['inActiveUser'] = User::where('status', 'active')->whereIn('role', ['user', 'agent'])->get();
+                    $data['allUserCount'] = User::whereIn('role', ['user', 'agent'])->count();
+                    $data['requestView'] = PropertyViewing::with('property', 'user')->latest()->get();
+                    $data['pendingCount'] = PropertyViewing::where('status', 0)->count();
+                    $data['acceptedView'] = PropertyViewing::where('status', 1)->count();
+                    $data['todayRequests'] = PropertyViewing::with('property', 'user')
                         ->whereDate('view_date', Carbon::today())
                         ->latest()
                         ->get();
-                    $totalViewingRequests = PropertyViewing::count();
-                    $inActiveUserCount = $inActiveUser->count();
-                    $activeUsers = User::whereIn('role', ['user', 'agent'])
+                    $data['totalViewingRequests'] = PropertyViewing::count();
+                    $inActiveUserCount = $data['inActiveUser']->count();
+                    $data['activeUsers'] = User::whereIn('role', ['user', 'agent'])
                         ->where('status', 'active')
                         ->latest()
                         ->take(5)
                         ->get();
-                    $totalCount = $pendingCount + $inActiveUserCount;
+                    $data['totalCount'] = $data['pendingCount'] + $inActiveUserCount;
 
-                    $totalEnquiries = Contact::count();
-                    $pendingEnquiries = Contact::where('status', '0')->count();
-                    $contactsData = Contact::select('contacts.name', 'contacts.property_id', 'properties.address')
+                    $data['totalEnquiries'] = Contact::count();
+                    $data['pendingEnquiries'] = Contact::where('status', '0')->count();
+                    $data['contactsData'] = Contact::select('contacts.name', 'contacts.property_id', 'properties.address')
                         ->join('properties', 'contacts.property_id', '=', 'properties.id')
                         ->where('contacts.status', 0)
                         ->get();
-
-                    $view->with([
-                        'requestView' => $requestView,
-                        'pendingCount' => $pendingCount,
-                        'inActiveUser' => $inActiveUser,
-                        'totalCount' => $totalCount,
-                        'activeUsers' => $activeUsers,
-                        'allUserCount' => $allUserCount,
-                        'totalViewingRequests' => $totalViewingRequests,
-                        'acceptedView' => $acceptedView,
-                        'todayRequests' => $todayRequests,
-                        'propertyRequests' => $propertyRequests,
-                        'totalEnquiries' => $totalEnquiries,
-                        'pendingEnquiries' => $pendingEnquiries,
-                        'contactsData' => $contactsData
-                    ]);
                 }
             } catch (\Exception $e) {
                 \Log::error('Dashboard view data load failed: ' . $e->getMessage());
-                // You can optionally inject fallback empty values here
             }
+
+            $view->with($data);
         });
     }
 }
