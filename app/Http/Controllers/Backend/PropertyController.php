@@ -46,31 +46,39 @@ class PropertyController extends Controller
 
     public function StoreProperty(Request $request)
     {
+        // Optional: remove this after testing
+        // dd($request->all());
 
-        $amenitiesId = $request->amenities_id;
-        $amenities = implode(',', $amenitiesId);
-        $featuresId = $request->features_id;
-        $features = implode(',', $featuresId);
-        $pcode = IdGenerator::generate(['table' => 'properties', 'field' => 'property_code', 'length' => 6, 'prefix' => 'EP-']);
+        // Handle optional multi-select inputs
+        $amenitiesId = $request->input('amenities_id', []);
+        $featuresId = $request->input('features_id', []);
+
+        $amenities = implode(',', (array) $amenitiesId);
+        $features = implode(',', (array) $featuresId);
+
+        $pcode = IdGenerator::generate([
+            'table' => 'properties',
+            'field' => 'property_code',
+            'length' => 6,
+            'prefix' => 'EP-'
+        ]);
+
         $file = $request->file('property_thumbnail');
         $saveUrl = null;
 
-        //digitalocean Spaces upload
+        // Upload property thumbnail to DigitalOcean Spaces
         if ($file) {
             $path = 'thumbnail/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-            // Upload file to DigitalOcean Spaces with visibility and MIME type
             $saved = Storage::disk('digitalocean')->put($path, file_get_contents($file), [
                 'visibility' => 'public',
                 'ContentType' => $file->getMimeType(),
             ]);
 
-            // Generate public URL
             if ($saved) {
                 $saveUrl = Storage::disk('digitalocean')->url($path);
             }
         }
-
 
         $propertyData = [
             'ptype_id' => $request->ptype_id,
@@ -82,8 +90,6 @@ class PropertyController extends Controller
             'property_code' => $pcode,
             'property_status' => $request->property_status,
             'furnishing' => $request->furnishing,
-            // 'deposit' => $request->deposit ?? 0,
-            // 'rent' => $request->rent,
             'description' => $request->description,
             'bedrooms' => $request->bedrooms ?? 0,
             'bathrooms' => $request->bathrooms,
@@ -112,33 +118,30 @@ class PropertyController extends Controller
             'status' => 1,
             'agent_id' => $request->agent_id,
             'property_thumbnail' => $saveUrl,
-            'created_at' => Carbon::now(),
+            'created_at' => now(),
         ];
 
-        // Conditionally add rent/deposit or price
+        // Add price or rent/deposit based on category
         if ($request->property_category === 'rent') {
             $propertyData['rent'] = $request->rent ?? 0;
-            $propertyData['deposit'] = $request->deposit ?? '0';
+            $propertyData['deposit'] = $request->deposit ?? 0;
         } elseif ($request->property_category === 'sales') {
             $propertyData['price'] = $request->price ?? 0;
         }
 
-        // Insert property and get ID
+        // Save property and get its ID
         $property_id = Property::insertGetId($propertyData);
 
-        // Multi-Image Upload
+        // Handle multiple image uploads
         $uploadedImages = [];
 
         if ($request->hasFile('multiple_image')) {
             foreach ($request->file('multiple_image') as $img) {
                 try {
                     $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
-
-                    // Upload each image to DigitalOcean Spaces
                     $saved = Storage::disk('digitalocean')->put($path, file_get_contents($img), 'public');
 
                     if ($saved) {
-                        // Generate public URL
                         $uploadedImages[] = Storage::disk('digitalocean')->url($path);
                     }
                 } catch (\Exception $e) {
@@ -147,19 +150,13 @@ class PropertyController extends Controller
             }
         }
 
-
-        if (empty($uploadedImages)) {
-            $uploadedImages = [null];
-        }
-
-        if (!empty($uploadedImages) && $uploadedImages !== [null]) {
-            foreach ($uploadedImages as $imageUrl) {
-                MultiImage::create([
-                    'property_id' => $property_id,
-                    'image' => $imageUrl,
-                    'created_at' => now(),
-                ]);
-            }
+        // Save image records to DB
+        foreach ($uploadedImages as $imageUrl) {
+            MultiImage::create([
+                'property_id' => $property_id,
+                'image' => $imageUrl,
+                'created_at' => now(),
+            ]);
         }
 
         $notification = [
@@ -168,10 +165,8 @@ class PropertyController extends Controller
         ];
 
         return redirect()->route('all.property')->with($notification);
-
-
-        return redirect()->route('all.property')->with($notification);
     }
+
 
     public function EditProperty($id)
     {
