@@ -41,7 +41,7 @@ class PropertyController extends Controller
         $amenities = Amenities::latest()->get();
         $features = Feature::latest()->get();
         $activeAgents = User::where('role', 'agent')->where('status', 'active')->latest()->get();
-        return view('backend.property.add_property', compact('propertyType', 'amenities', 'activeAgents'));
+        return view('backend.property.add_property', compact('propertyType', 'amenities', 'features', 'activeAgents'));
     }
 
     public function StoreProperty(Request $request)
