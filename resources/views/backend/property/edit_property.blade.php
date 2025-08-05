@@ -299,7 +299,7 @@
                         <div class="row row-card-no-pd mt--2">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Property Location / Address <span class="h6">(Search the postcode to populate the address and location)</span></h4>
+                                    <h4 class="card-title">Property Location <span class="h6">(Search the postcode to populate the address and location)</span></h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
