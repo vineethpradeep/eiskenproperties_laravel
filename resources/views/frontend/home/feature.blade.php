@@ -1,14 +1,18 @@
 @php
 use Illuminate\Support\Facades\Auth;
 use App\Models\Wishlist;
+use App\Models\Property;
 
-$properties = App\Models\Property::with('propertyType')
-->where('status', '1')
-->whereNotNull('featured')
+// Fetch properties that have any features_id (not null or empty)
+$properties = Property::with('propertyType')
+->where('status', 1)
+->whereNotNull('features_id')
+->where('features_id', '!=', '')
 ->latest()
 ->limit(3)
 ->get();
 
+// Initialize wishlist for authenticated user
 $userWishlist = [];
 
 if (Auth::check()) {
@@ -17,6 +21,7 @@ $userWishlist = Wishlist::where('user_id', Auth::id())
 ->toArray();
 }
 @endphp
+
 
 <div class="container-xxl py-5">
     <div class="container">

@@ -8,12 +8,11 @@
         @php
         $category = strtolower($property->property_category);
         @endphp
-
         <div class="rounded text-white position-absolute end-0 top-0 m-4 py-1 px-3
     {{ $category === 'rent' ? 'bg-warning' : 'bg-success' }}">
             For {{ ucfirst($property->property_category) }}
         </div>
-        @if ($property->featured)
+        @if (!empty($property->features_id))
         <div class="feature-tag">
             <div id="pointer">Featured</div>
         </div>
