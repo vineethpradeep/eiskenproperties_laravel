@@ -426,7 +426,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
 <script>
-    feather.replace();
     $(document).ready(function() {
         // Initialize the slider
         $("#propertyViewForm").validate({
