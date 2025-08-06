@@ -107,6 +107,9 @@
     <!-- Sweet Alert -->
     <script src="{{asset('assets/js/plugin/sweetalert/sweetalert.min.js')}}"></script>
 
+    <!-- Atlantis Image Compression JS -->
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+
     <!-- eiskenadmin JS -->
     <script src="{{asset('assets/js/eiskenadmin.min.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

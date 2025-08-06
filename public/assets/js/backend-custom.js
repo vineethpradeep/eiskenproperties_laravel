@@ -13,6 +13,19 @@ $(document).ready(function () {
     const $thumbInput = $("#property_thumbnail");
     const $existingImage = $("#existing_image");
 
+    async function compressImage(file) {
+        try {
+            return await imageCompression(file, {
+                maxSizeMB: 1, // Compress to under 1 MB
+                maxWidthOrHeight: 1200, // Resize to 1200px max
+                useWebWorker: true,
+            });
+        } catch (error) {
+            console.error("Compression failed:", error);
+            return file; // fallback to original if compression fails
+        }
+    }
+
     function updateMainImageUI(src) {
         $("#mainThmbImg").attr("src", src);
         const hasRealImage = src !== "https://placehold.co/600x400";
@@ -24,20 +37,72 @@ $(document).ready(function () {
         }
     }
 
-    window.mainThamUrl = function (input) {
+    // function updateMainImageUI(src) {
+    //     $("#mainThmbImg").attr("src", src);
+    //     const hasRealImage = src !== "https://placehold.co/600x400";
+    //     $mainImgCol.toggle(hasRealImage);
+    //     $mainThmbCheck.prop("checked", hasRealImage);
+    //     $deleteBtn.prop("disabled", !hasRealImage).toggle(hasRealImage);
+    //     if (!hasRealImage) {
+    //         $existingImage.val("");
+    //     }
+    // }
+
+    // window.mainThamUrl = function (input) {
+    //     if (!input.files?.[0]) return;
+    //     const reader = new FileReader();
+    //     reader.onload = (e) => {
+    //         // update UI and inject the new src into the hidden too
+    //         updateMainImageUI(e.target.result);
+    //         $existingImage.val(""); // new upload overrides existing
+    //     };
+    //     reader.readAsDataURL(input.files[0]);
+    // };
+
+    window.mainThamUrl = async function (input) {
         if (!input.files?.[0]) return;
+        const compressedFile = await compressImage(input.files[0]);
         const reader = new FileReader();
         reader.onload = (e) => {
-            // update UI and inject the new src into the hidden too
             updateMainImageUI(e.target.result);
             $existingImage.val(""); // new upload overrides existing
         };
-        reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(compressedFile);
     };
 
-    $("#property_thumbnail").on("change", function () {
-        const file = this.files[0];
+    // $("#property_thumbnail").on("change", function () {
+    //     const file = this.files[0];
 
+    //     if (!file) return;
+
+    //     const maxSize = 10 * 1024 * 1024;
+    //     if (file.size > maxSize) {
+    //         Swal.fire(
+    //             "File Too Large",
+    //             "Main image must be under 10 MB.",
+    //             "error"
+    //         ).then(() => {
+    //             $(this).val("");
+    //             updateMainImageUI("https://placehold.co/600x400");
+    //             $mainThmbCheck.prop("checked", false);
+    //             $deleteBtn.prop("disabled", true).hide();
+    //         });
+    //         return;
+    //     }
+
+    //     // Valid file — show preview
+    //     const reader = new FileReader();
+    //     reader.onload = (e) => {
+    //         updateMainImageUI(e.target.result);
+    //         $existingImage.val(""); // Clear hidden field if new image
+    //         $mainThmbCheck.prop("checked", true);
+    //         $deleteBtn.prop("disabled", false).show();
+    //     };
+    //     reader.readAsDataURL(file);
+    // });
+
+    $("#property_thumbnail").on("change", async function () {
+        const file = this.files[0];
         if (!file) return;
 
         const maxSize = 10 * 1024 * 1024;
@@ -55,24 +120,54 @@ $(document).ready(function () {
             return;
         }
 
-        // Valid file — show preview
+        const compressedFile = await compressImage(file);
         const reader = new FileReader();
         reader.onload = (e) => {
             updateMainImageUI(e.target.result);
-            $existingImage.val(""); // Clear hidden field if new image
+            $existingImage.val("");
             $mainThmbCheck.prop("checked", true);
             $deleteBtn.prop("disabled", false).show();
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(compressedFile);
     });
 
     $(".validate-on-change").on("change input", function () {
         $(this).valid();
     });
 
+    // $deleteBtn.on("click", function (e) {
+    //     e.preventDefault();
+
+    //     Swal.fire({
+    //         title: "Are you sure?",
+    //         text: "This main image will be removed.",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonText: "Yes, delete it!",
+    //         cancelButtonText: "Cancel",
+    //         customClass: {
+    //             confirmButton: "btn btn-success",
+    //             cancelButton: "btn btn-danger",
+    //         },
+    //         buttonsStyling: false,
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             updateMainImageUI("https://placehold.co/600x400");
+    //             $thumbInput.val("");
+    //             $mainThmbCheck.prop("checked", false);
+    //             $deleteBtn.prop("disabled", true).hide();
+
+    //             Swal.fire(
+    //                 "Deleted!",
+    //                 "Your main image has been removed.",
+    //                 "success"
+    //             );
+    //         }
+    //     });
+    // });
+
     $deleteBtn.on("click", function (e) {
         e.preventDefault();
-
         Swal.fire({
             title: "Are you sure?",
             text: "This main image will be removed.",
@@ -106,7 +201,46 @@ $(document).ready(function () {
         $deleteBtn.prop("disabled", !isChecked).toggle(isChecked);
     });
 
-    $multiImageInput.on("change", function () {
+    // $multiImageInput.on("change", function () {
+    //     const over = Array.from(this.files).filter(
+    //         (f) => f.size > 10 * 1024 * 1024
+    //     );
+    //     if (over.length) {
+    //         Swal.fire(
+    //             "Error",
+    //             "Please choose images under 10 MB each.",
+    //             "error"
+    //         );
+    //         this.value = "";
+    //         $("#previewContainer").empty();
+    //     }
+    //     const files = Array.from(this.files);
+    //     $previewContainer.empty();
+
+    //     if (files.length > 0) {
+    //         $multiImgCol.show();
+    //         files.forEach((file, index) => {
+    //             const reader = new FileReader();
+    //             reader.onload = function (e) {
+    //                 $previewContainer.append(`
+    //                     <div class="col-6 col-sm-4 mb-3 new-image">
+    //                         <label class="imagecheck w-100">
+    //                             <input type="checkbox" class="imagecheck-input" data-index="${index}">
+    //                             <figure class="imagecheck-figure">
+    //                                 <img src="${e.target.result}" alt="Thumbnail" class="imagecheck-image" width="100%">
+    //                             </figure>
+    //                         </label>
+    //                     </div>`);
+    //             };
+    //             reader.readAsDataURL(file);
+    //         });
+    //     }
+    //     $multiImagedeleteBtn.prop("disabled", true);
+    // });
+
+    // Whenever a checkbox is (un)checked…
+
+    $multiImageInput.on("change", async function () {
         const over = Array.from(this.files).filter(
             (f) => f.size > 10 * 1024 * 1024
         );
@@ -117,14 +251,17 @@ $(document).ready(function () {
                 "error"
             );
             this.value = "";
-            $("#previewContainer").empty();
+            $previewContainer.empty();
+            return;
         }
+
         const files = Array.from(this.files);
         $previewContainer.empty();
 
         if (files.length > 0) {
             $multiImgCol.show();
-            files.forEach((file, index) => {
+            for (let index = 0; index < files.length; index++) {
+                const compressedFile = await compressImage(files[index]);
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     $previewContainer.append(`
@@ -137,13 +274,12 @@ $(document).ready(function () {
                             </label>
                         </div>`);
                 };
-                reader.readAsDataURL(file);
-            });
+                reader.readAsDataURL(compressedFile);
+            }
         }
         $multiImagedeleteBtn.prop("disabled", true);
     });
 
-    // Whenever a checkbox is (un)checked…
     $previewContainer.on("change", ".imagecheck-input", function () {
         const checkedCount = $previewContainer.find(
             ".imagecheck-input:checked"
