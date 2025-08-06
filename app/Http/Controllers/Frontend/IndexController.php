@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\MultiImage;
 use App\Models\Amenities;
+use App\Models\Feature;
 use App\Http\Controllers\Controller;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -17,8 +18,23 @@ class IndexController extends Controller
     {
         $property = Property::FindOrFail($id);
         $multiImage = MultiImage::where('property_id', $id)->get();
-        $amenities = explode(',', $property->amenities_id);
-        $propertyAmenities = Amenities::whereIn('id', $amenities)->get();
+        // Amenities check
+        $propertyAmenities = collect();
+        if (!empty($property->amenities_id)) {
+            $amenities = explode(',', $property->amenities_id);
+            if (!empty($amenities)) {
+                $propertyAmenities = Amenities::whereIn('id', $amenities)->get();
+            }
+        }
+
+        // Features check
+        $propertyFeatures = collect();
+        if (!empty($property->features_id)) {
+            $features = explode(',', $property->features_id);
+            if (!empty($features)) {
+                $propertyFeatures = Feature::whereIn('id', $features)->get();
+            }
+        }
         $propertyTypeId = $property->ptype_id;
         $similarProperty = Property::where('ptype_id', $propertyTypeId)
             ->where('id', '!=', $id)
@@ -38,6 +54,7 @@ class IndexController extends Controller
             'property',
             'multiImage',
             'propertyAmenities',
+            'propertyFeatures',
             'similarProperty',
             'userWishlist',
             'streets'

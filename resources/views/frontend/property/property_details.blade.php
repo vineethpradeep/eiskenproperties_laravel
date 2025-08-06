@@ -106,6 +106,22 @@
                         ideal choice for your next move
                     </p> -->
 
+                    @if (!empty($propertyFeatures) && $propertyFeatures->count())
+                    <div class="row no-gutters mt-5">
+                        <div class="col-12">
+                            <h2 class="h4 text-black mb-3">Property Features</h2>
+                            <ul class="row-cols-3 amenity-list">
+                                @foreach($propertyFeatures as $feature)
+                                <li class="col">
+                                    <p class="fw-bold">
+                                        <i class="fa fa-check text-success me-3"></i>{{ $feature->feature_name }}
+                                    </p>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                    @endif
                     <div class="row no-gutters mt-5">
                         <div class="col-12">
                             <h2 class="h4 text-black mb-3">Property Amenities</h2>
