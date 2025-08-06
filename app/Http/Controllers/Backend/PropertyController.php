@@ -65,20 +65,6 @@ class PropertyController extends Controller
         $file = $request->file('property_thumbnail');
         $saveUrl = null;
 
-        // Upload property thumbnail to DigitalOcean Spaces
-        // if ($file) {
-        //     $path = 'thumbnail/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
-
-        //     $saved = Storage::disk('digitalocean')->put($path, file_get_contents($file), [
-        //         'visibility' => 'public',
-        //         'ContentType' => $file->getMimeType(),
-        //     ]);
-
-        //     if ($saved) {
-        //         $saveUrl = Storage::disk('digitalocean')->url($path);
-        //     }
-        // }
-
         if ($file) {
             // Create a medium resolution image (max 1600x1200)
             $image = Image::read($file) // <- use read() instead of make()
@@ -92,7 +78,7 @@ class PropertyController extends Controller
 
             $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
                 'visibility' => 'public',
-                'ContentType' => $file->getMimeType(),
+                'ContentType' => 'image/jpeg',
             ]);
 
             if ($saved) {
@@ -155,21 +141,6 @@ class PropertyController extends Controller
 
         // Handle multiple image uploads
         $uploadedImages = [];
-
-        // if ($request->hasFile('multiple_image')) {
-        //     foreach ($request->file('multiple_image') as $img) {
-        //         try {
-        //             $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
-        //             $saved = Storage::disk('digitalocean')->put($path, file_get_contents($img), 'public');
-
-        //             if ($saved) {
-        //                 $uploadedImages[] = Storage::disk('digitalocean')->url($path);
-        //             }
-        //         } catch (\Exception $e) {
-        //             \Log::error('Failed to upload image: ' . $e->getMessage());
-        //         }
-        //     }
-        // }
 
         if ($request->hasFile('multiple_image')) {
             foreach ($request->file('multiple_image') as $img) {
