@@ -691,7 +691,7 @@
                     required: false
                 },
                 bathrooms: {
-                    required: true
+                    required: false
                 },
                 floors: {
                     required: false

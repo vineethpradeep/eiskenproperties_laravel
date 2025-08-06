@@ -92,7 +92,7 @@ class PropertyController extends Controller
 
             $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
                 'visibility' => 'public',
-                'ContentType' => 'image/jpeg',
+                'ContentType' => $file->getMimeType(),
             ]);
 
             if ($saved) {
