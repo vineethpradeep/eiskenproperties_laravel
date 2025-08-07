@@ -13,9 +13,6 @@ use App\Models\PropertyViewing;
 use App\Models\User;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Carbon\Carbon;
-use Intervention\Image\Laravel\Facades\Image;
-use Intervention\Image\Encoders\JpegEncoder;
-// use Intervention\Image\Facades\Image;
 use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -314,52 +311,6 @@ class PropertyController extends Controller
     }
 
 
-    // public function UpdatePropertyThumbnail(Request $request)
-    // {
-    //     $request->validate([
-    //         'property_thumbnail' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120' // Max 5MB
-    //     ]);
-
-    //     $pro_id = $request->id;
-    //     $oldImageUrl = $request->old_property_thumbnail_image;
-
-    //     $image = $request->file('property_thumbnail');
-    //     $path = 'thumbnail/' . Str::uuid() . '.' . $image->getClientOriginalExtension();
-
-    //     try {
-    //         // Upload to DigitalOcean Spaces
-    //         Storage::disk('digitalocean')->put($path, file_get_contents($image), 'public');
-
-    //         // Delete old image if it exists
-    //         if (!empty($oldImageUrl)) {
-    //             $oldPath = ltrim(parse_url($oldImageUrl, PHP_URL_PATH), '/');
-    //             // Remove bucket name and domain to get relative key
-    //             $relativePath = preg_replace("/^" . preg_quote(env('DO_BUCKET')) . "\//", '', $oldPath);
-    //             Storage::disk('digitalocean')->delete($relativePath);
-    //         }
-
-    //         // Generate public URL
-    //         $saveUrl = Storage::disk('digitalocean')->url($path);
-
-    //         Property::findOrFail($pro_id)->update([
-    //             'property_thumbnail' => $saveUrl,
-    //             'updated_at' => now(),
-    //         ]);
-
-    //         return redirect()->back()->with([
-    //             'message' => 'Property Thumbnail Updated Successfully',
-    //             'alert-type' => 'success',
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         \Log::error('Failed to upload thumbnail: ' . $e->getMessage());
-
-    //         return redirect()->back()->with([
-    //             'message' => 'Thumbnail upload failed',
-    //             'alert-type' => 'error',
-    //         ]);
-    //     }
-    // }
-
     public function UpdatePropertyThumbnail(Request $request)
     {
         $request->validate([
@@ -371,37 +322,25 @@ class PropertyController extends Controller
 
         $file = $request->file('property_thumbnail');
         $extension = strtolower($file->getClientOriginalExtension());
-        $path = 'thumbnail/' . Str::uuid() . '.jpg'; // force jpg for compression
+        $path = 'thumbnail/' . Str::uuid() . '.' . $extension;
 
         try {
-            // Resize + compress with Intervention
-            $image = Image::read($file)
-                ->resize(1600, 1200, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->encode(new JpegEncoder(75)); // compress as jpg
-
-            // Upload to DigitalOcean Spaces
-            Storage::disk('digitalocean')->put($path, (string) $image, [
+            // Upload new thumbnail to DigitalOcean Spaces
+            Storage::disk('digitalocean')->put($path, file_get_contents($file), [
                 'visibility' => 'public',
-                'ContentType' => 'image/jpeg',
+                'ContentType' => $file->getMimeType(),
             ]);
 
             // Delete old image if it exists
             if (!empty($oldImageUrl)) {
                 $oldPath = ltrim(parse_url($oldImageUrl, PHP_URL_PATH), '/');
-                $relativePath = preg_replace(
-                    "/^" . preg_quote(env('DO_BUCKET')) . "\//",
-                    '',
-                    $oldPath
-                );
-                Storage::disk('digitalocean')->delete($relativePath);
+                Storage::disk('digitalocean')->delete($oldPath);
             }
 
             // Generate public URL
             $saveUrl = Storage::disk('digitalocean')->url($path);
 
+            // Update database
             Property::findOrFail($pro_id)->update([
                 'property_thumbnail' => $saveUrl,
                 'updated_at' => now(),
@@ -421,47 +360,6 @@ class PropertyController extends Controller
         }
     }
 
-    // public function UpdatePropertyMultiImage(Request $request)
-    // {
-    //     $multiImages = $request->multiple_image;
-
-    //     if (!is_array($multiImages)) {
-    //         return back()->with('error', 'No images selected.');
-    //     }
-
-    //     foreach ($multiImages as $id => $image) {
-    //         $existingImage = MultiImage::findOrFail($id);
-
-    //         // Get the old image path and delete it from Spaces
-    //         $oldImageUrl = $existingImage->image;
-    //         if (!empty($oldImageUrl)) {
-    //             $parsedPath = parse_url($oldImageUrl, PHP_URL_PATH);
-    //             $bucket = config('filesystems.disks.digitalocean.bucket');
-    //             $relativeKey = preg_replace("/^\/?{$bucket}\//", '', ltrim($parsedPath, '/'));
-
-    //             Storage::disk('digitalocean')->delete($relativeKey);
-    //         }
-
-    //         // Upload the new image
-    //         $path = 'multi-image/' . Str::uuid() . '.' . $image->getClientOriginalExtension();
-    //         $uploaded = Storage::disk('digitalocean')->put($path, file_get_contents($image), 'public');
-
-    //         if ($uploaded) {
-    //             $publicUrl = Storage::disk('digitalocean')->url($path);
-
-    //             $existingImage->update([
-    //                 'image' => $publicUrl,
-    //                 'updated_at' => now(),
-    //             ]);
-    //         }
-    //     }
-
-    //     return redirect()->back()->with([
-    //         'message' => 'Property Multi-Image Updated Successfully',
-    //         'alert-type' => 'success',
-    //     ]);
-    // }
-
     public function UpdatePropertyMultiImage(Request $request)
     {
         $multiImages = $request->multiple_image;
@@ -476,29 +374,18 @@ class PropertyController extends Controller
             // Delete old image from DigitalOcean Spaces
             $oldImageUrl = $existingImage->image;
             if (!empty($oldImageUrl)) {
-                $parsedPath = parse_url($oldImageUrl, PHP_URL_PATH);
-                $bucket = config('filesystems.disks.digitalocean.bucket');
-                $relativeKey = preg_replace("/^\/?{$bucket}\//", '', ltrim($parsedPath, '/'));
-
-                Storage::disk('digitalocean')->delete($relativeKey);
+                $parsedPath = ltrim(parse_url($oldImageUrl, PHP_URL_PATH), '/');
+                Storage::disk('digitalocean')->delete($parsedPath);
             }
 
-            // Define new path (force jpg for compression)
-            $path = 'multi-image/' . Str::uuid() . '.jpg';
+            $extension = strtolower($image->getClientOriginalExtension());
+            $path = 'multi-image/' . Str::uuid() . '.' . $extension;
 
             try {
-                // Resize + compress using Intervention
-                $processedImage = Image::read($image)
-                    ->resize(1600, 1200, function ($constraint) {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    })
-                    ->encode(new JpegEncoder(75));
-
-                // Upload processed image
-                $uploaded = Storage::disk('digitalocean')->put($path, (string) $processedImage, [
+                // Upload the new image file as-is (no resize/compression)
+                $uploaded = Storage::disk('digitalocean')->put($path, file_get_contents($image), [
                     'visibility' => 'public',
-                    'ContentType' => 'image/jpeg',
+                    'ContentType' => $image->getMimeType(),
                 ]);
 
                 if ($uploaded) {
@@ -519,6 +406,7 @@ class PropertyController extends Controller
             'alert-type' => 'success',
         ]);
     }
+
 
     public function PropertyMultiImageDelete($id)
     {
@@ -547,51 +435,6 @@ class PropertyController extends Controller
         ]);
     }
 
-    // public function StoreNewMultiImage(Request $request)
-    // {
-    //     $image = $request->file('multiple_image');
-
-    //     if (!$image) {
-    //         return redirect()->back()->with([
-    //             'message' => 'No image uploaded',
-    //             'alert-type' => 'error',
-    //         ]);
-    //     }
-
-    //     // Generate unique storage path
-    //     $path = 'multi-image/' . Str::uuid() . '.' . $image->getClientOriginalExtension();
-
-    //     try {
-    //         // Upload to DigitalOcean Spaces
-    //         Storage::disk('digitalocean')->put($path, file_get_contents($image), [
-    //             'visibility' => 'public',
-    //             'ContentType' => $image->getMimeType(),
-    //         ]);
-
-
-    //         // Generate public URL
-    //         $publicUrl = Storage::disk('digitalocean')->url($path);
-
-    //         // Save record in DB
-    //         MultiImage::insert([
-    //             'property_id' => $request->new_multi_image,
-    //             'image' => $publicUrl,
-    //             'created_at' => now(),
-    //         ]);
-
-    //         return redirect()->back()->with([
-    //             'message' => 'Property Multi-Image Added Successfully',
-    //             'alert-type' => 'success',
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         \Log::error('Multi-image upload failed: ' . $e->getMessage());
-
-    //         return redirect()->back()->with([
-    //             'message' => 'Image upload failed',
-    //             'alert-type' => 'error',
-    //         ]);
-    //     }
-    // }
 
     public function StoreNewMultiImage(Request $request)
     {
@@ -604,29 +447,27 @@ class PropertyController extends Controller
             ]);
         }
 
-        // Generate unique path (force JPG for better compression)
-        $path = 'multi-image/' . Str::uuid() . '.jpg';
+        // Generate unique filename with original extension
+        $extension = $image->getClientOriginalExtension();
+        $filename = Str::uuid() . '.' . $extension;
+        $path = 'multi-image/' . $filename;
 
         try {
-            // Resize & compress with Intervention
-            $processedImage = Image::read($image)
-                ->resize(1600, 1200, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->encode(new JpegEncoder(75)); // Quality: 75%
-
-            // Upload to DigitalOcean Spaces
-            Storage::disk('digitalocean')->put($path, (string) $processedImage, [
+            // Upload raw file to DigitalOcean Spaces
+            $uploaded = Storage::disk('digitalocean')->putFileAs('multi-image', $image, $filename, [
                 'visibility' => 'public',
-                'ContentType' => 'image/jpeg',
+                'ContentType' => $image->getMimeType(),
             ]);
+
+            if (!$uploaded) {
+                throw new \Exception('Failed to upload image');
+            }
 
             // Generate public URL
             $publicUrl = Storage::disk('digitalocean')->url($path);
 
             // Save to DB
-            MultiImage::insert([
+            MultiImage::create([
                 'property_id' => $request->new_multi_image,
                 'image' => $publicUrl,
                 'created_at' => now(),
@@ -645,45 +486,6 @@ class PropertyController extends Controller
             ]);
         }
     }
-
-    // public function DeleteProperty($id)
-    // {
-    //     $property = Property::findOrFail($id);
-
-    //     // Delete property thumbnail from Spaces
-    //     if ($property->property_thumbnail) {
-    //         $thumbnailPath = parse_url($property->property_thumbnail, PHP_URL_PATH);
-    //         $bucket = config('filesystems.disks.digitalocean.bucket');
-
-    //         // Remove bucket prefix from path
-    //         $relativePath = preg_replace("/^\/?{$bucket}\//", '', ltrim($thumbnailPath, '/'));
-
-    //         Storage::disk('digitalocean')->delete($relativePath);
-    //     }
-
-    //     // Delete property record
-    //     $property->delete();
-
-    //     // Delete all multi-images
-    //     $multiImages = MultiImage::where('property_id', $id)->get();
-    //     foreach ($multiImages as $img) {
-    //         if ($img->image) {
-    //             $imgPath = parse_url($img->image, PHP_URL_PATH);
-    //             $bucket = config('filesystems.disks.digitalocean.bucket');
-
-    //             $relativePath = preg_replace("/^\/?{$bucket}\//", '', ltrim($imgPath, '/'));
-
-    //             Storage::disk('digitalocean')->delete($relativePath);
-    //         }
-
-    //         $img->delete(); // delete individual image record
-    //     }
-
-    //     return redirect()->back()->with([
-    //         'message' => 'Property Deleted Successfully',
-    //         'alert-type' => 'success',
-    //     ]);
-    // }
 
     public function DeleteProperty($id)
     {
