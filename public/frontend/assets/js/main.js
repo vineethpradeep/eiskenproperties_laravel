@@ -305,9 +305,9 @@
             }
 
             const form = slider.closest("form");
-            const formType = form?.dataset.searchType;
+            const formType = form?.dataset.searchType || "all";
 
-            if (formType === "sale" || formType === "rent") {
+            if (["sale", "rent", "all"].includes(formType)) {
                 configureRange(formType);
             }
 

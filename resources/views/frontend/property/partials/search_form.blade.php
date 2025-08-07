@@ -1,29 +1,42 @@
 @php
-$searchType = request('search_type', 'rent');
+$searchType = request('search_type', Str::contains($action, 'sale') ? 'sale' : (Str::contains($action, 'rent') ? 'rent' : 'all'));
+
 
 $defaultPrices = [
 'sale' => ['min' => 50000, 'max' => 5000000],
 'rent' => ['min' => 250, 'max' => 10000],
+'all' => ['min' => 250, 'max' => 5000000], // unified range for all
+];
+
+$defaultSqft = [
+'sale' => ['min' => 100, 'max' => 10000],
+'rent' => ['min' => 100, 'max' => 10000],
+'all' => ['min' => 100, 'max' => 10000],
 ];
 
 $selectedDefaults = $defaultPrices[$searchType];
+$selectedSqftDefaults = $defaultSqft[$searchType];
 
 $minPrice = request()->has('min_price') ? (int) request('min_price') : $selectedDefaults['min'];
 $maxPrice = request()->has('max_price') ? (int) request('max_price') : $selectedDefaults['max'];
 
-$minSqft = request('min_square_feet', 400);
-$maxSqft = request('max_square_feet', 10000);
+$minSqft = request()->has('min_square_feet') ? (int) request('min_square_feet') : $selectedSqftDefaults['min'];
+$maxSqft = request()->has('max_square_feet') ? (int) request('max_square_feet') : $selectedSqftDefaults['max'];
 
 $minSlider = $selectedDefaults['min'];
 $maxSlider = $selectedDefaults['max'];
-$stepSlider = $searchType === 'sale' ? 1000 : 250;
+
+$stepSlider = $searchType === 'sale' ? 1000 : ($searchType === 'rent' ? 250 : 500); // adaptive step
+$sqftStep = 100; // consistent step
 @endphp
+
 
 
 <div class="row">
     <div class="col-12">
-        <form action="{{ $action }}" method="GET" data-search-type="{{ Str::contains($action, 'sale') ? 'sale' : 'rent' }}">
+        <form action="{{ $action }}" method="GET" data-search-type="{{ Str::contains($action, 'sale') ? 'sale' : (Str::contains($action, 'rent') ? 'rent' : 'all') }}">
             @csrf
+            <input type="hidden" name="search_type" value="{{ $searchType }}" />
             <div class="row">
                 <div
                     class="col-12 col-md-4 col-lg-4 mt-3 mt-lg-0">
@@ -180,7 +193,10 @@ $stepSlider = $searchType === 'sale' ? 1000 : 250;
                             data-sale-step="1000"
                             data-rent-min="250"
                             data-rent-max="10000"
-                            data-rent-step="250">
+                            data-rent-step="250"
+                            data-all-min="250"
+                            data-all-max="5000000"
+                            data-all-step="500">
                             <div class="range-values">
                                 <div class="label">Price Range</div>
                                 <div class="value">
@@ -217,51 +233,52 @@ $stepSlider = $searchType === 'sale' ? 1000 : 250;
                         </div>
                     </div>
 
-                    <div
-                        class="col-12 col-lg-4 mt-3 mt-lg-4">
+                    <div class="col-12 col-lg-4 mt-3 mt-lg-4">
                         <div class="range-slider"
-                            data-prefix="Sqft "
-                            data-sale-min="1000"
+                            data-prefix="Sqft"
+                            data-sale-min="100"
                             data-sale-max="10000"
-                            data-sale-step="500"
-                            data-rent-min="400"
-                            data-rent-max="5000"
-                            data-rent-step="50">
+                            data-sale-step="100"
+                            data-rent-min="100"
+                            data-rent-max="10000"
+                            data-rent-step="100"
+                            data-all-min="100"
+                            data-all-max="10000"
+                            data-all-step="100">
 
                             <div class="range-values">
                                 <div class="label">Square Feet</div>
                                 <div class="value">
-                                    <span class="rangeMinValue">400</span> -
-                                    <span class="rangeMaxValue">5000</span>
+                                    <span class="rangeMinValue">{{ number_format($minSqft) }}</span> -
+                                    <span class="rangeMaxValue">{{ number_format($maxSqft) }}</span>
                                 </div>
                             </div>
 
                             <div class="range-bar">
                                 <div class="range-slider-track"></div>
+
                                 <input
                                     type="range"
                                     class="rangeMin"
-                                    min="400"
-                                    max="5000"
+                                    min="{{ $selectedSqftDefaults['min'] }}"
+                                    max="{{ $selectedSqftDefaults['max'] }}"
                                     value="{{ $minSqft }}"
-                                    step="50" />
+                                    step="{{ $sqftStep }}" />
                                 <input
                                     type="range"
                                     class="rangeMax"
-                                    min="400"
-                                    max="5000"
+                                    min="{{ $selectedSqftDefaults['min'] }}"
+                                    max="{{ $selectedSqftDefaults['max'] }}"
                                     value="{{ $maxSqft }}"
-                                    step="50" />
+                                    step="{{ $sqftStep }}" />
 
                                 <!-- Hidden inputs for form submission -->
                                 <input type="hidden" name="min_square_feet" class="hiddenMinSquareFeet" value="{{ $minSqft }}" />
                                 <input type="hidden" name="max_square_feet" class="hiddenMaxSquareFeet" value="{{ $maxSqft }}" />
-
                             </div>
                         </div>
-
-
                     </div>
+
                 </div>
 
                 @if (!empty($showMoreFilters) && $showMoreFilters)

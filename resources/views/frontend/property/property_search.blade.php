@@ -40,14 +40,33 @@ $streetOptions[] = $street;
         </div>
         <div class="row">
             <div class="col-lg-4 border rounded p-3 property-list-filter-form">
-                @if ($category === 'sales')
-                @include('frontend.property.partials.search_form', ['action' => route('property.search.sale'), 'showMoreFilters' => false])
-                @elseif ($category === 'rent')
-                @include('frontend.property.partials.search_form', ['action' => route('property.search.rent'), 'showMoreFilters' => false])
-                @else
-                <p>No valid category selected.</p>
-                @endif
+                <ul class="nav nav-tabs mb-3" id="searchTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{ $category === 'rent' ? 'active' : '' }}" id="rent-tab"
+                            data-bs-toggle="tab" data-bs-target="#rent-form" type="button" role="tab"
+                            aria-selected="{{ $category === 'rent' ? 'true' : 'false' }}">
+                            Rent
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link {{ $category === 'sales' ? 'active' : '' }}" id="sale-tab"
+                            data-bs-toggle="tab" data-bs-target="#sale-form" type="button" role="tab"
+                            aria-selected="{{ $category === 'sales' ? 'true' : 'false' }}">
+                            Sale
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="searchTabsContent">
+                    <div class="tab-pane fade {{ $category === 'rent' ? 'show active' : '' }}" id="rent-form" role="tabpanel" aria-labelledby="rent-tab">
+                        @include('frontend.property.partials.search_form', ['action' => route('property.search.rent'), 'showMoreFilters' => false])
+                    </div>
+                    <div class="tab-pane fade {{ $category === 'sales' ? 'show active' : '' }}" id="sale-form" role="tabpanel" aria-labelledby="sale-tab">
+                        @include('frontend.property.partials.search_form', ['action' => route('property.search.sale'), 'showMoreFilters' => false])
+                    </div>
+                </div>
             </div>
+
             <div class="col-lg-8">
                 @if ($properties->isNotEmpty())
                 <div class="col-12 text-center">

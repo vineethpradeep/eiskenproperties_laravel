@@ -38,8 +38,31 @@ $streetOptions[] = $street;
         </div>
         <div class="row">
             <div class="col-lg-4 border rounded p-3 property-list-filter-form">
-                @include('frontend.property.partials.search_form', ['action' => route('property.search.all'), 'showMoreFilters' => false])
+                <ul class="nav nav-tabs mb-3" id="searchTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="rent-tab" data-bs-toggle="tab" data-bs-target="#rent-form" type="button" role="tab">Rent</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="sale-tab" data-bs-toggle="tab" data-bs-target="#sale-form" type="button" role="tab">Sale</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all-form" type="button" role="tab">All</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="searchTabsContent">
+                    <div class="tab-pane fade" id="rent-form" role="tabpanel" aria-labelledby="rent-tab">
+                        @include('frontend.property.partials.search_form', ['action' => route('property.search.rent'), 'showMoreFilters' => false])
+                    </div>
+                    <div class="tab-pane fade" id="sale-form" role="tabpanel" aria-labelledby="sale-tab">
+                        @include('frontend.property.partials.search_form', ['action' => route('property.search.sale'), 'showMoreFilters' => false])
+                    </div>
+                    <div class="tab-pane fade show active" id="all-form" role="tabpanel" aria-labelledby="all-tab">
+                        @include('frontend.property.partials.search_form', ['action' => route('property.search.all'), 'showMoreFilters' => false])
+                    </div>
+                </div>
             </div>
+
             <div class="col-lg-8">
                 @if ($properties->isNotEmpty())
                 <div class="col-12 text-center">
