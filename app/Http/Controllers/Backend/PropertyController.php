@@ -65,47 +65,42 @@ class PropertyController extends Controller
         $file = $request->file('property_thumbnail');
         $saveUrl = null;
 
-        try {
-            $image = Image::read($file)
-                ->resize(1600, 1200, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->encode(new JpegEncoder(75));
+        // if ($file) {
+        //     // Create a medium resolution image (max 1600x1200)
+        //     $image = Image::read($file) // <- use read() instead of make()
+        //         ->resize(1600, 1200, function ($constraint) {
+        //             $constraint->aspectRatio();
+        //             $constraint->upsize();
+        //         })
+        //         ->encode(new JpegEncoder(75)); // quality 75%
 
-            $path = 'thumbnail/' . Str::uuid() . '.jpg';
+        //     $path = 'thumbnail/' . Str::uuid() . '.jpg';
 
-            $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
-                'visibility' => 'public',
-                'ContentType' => 'image/jpeg',
-            ]);
+        //     $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
+        //         'visibility' => 'public',
+        //         'ContentType' => 'image/jpeg',
+        //     ]);
 
-            if ($saved) {
-                $saveUrl = Storage::disk('digitalocean')->url($path);
-            }
-        } catch (\Exception $e) {
-            \Log::error('Thumbnail upload failed: ' . $e->getMessage());
-            return response()->json(['error' => 'Thumbnail upload failed'], 500);
-        }
+        //     if ($saved) {
+        //         $saveUrl = Storage::disk('digitalocean')->url($path);
+        //     }
+        // }
 
         if ($file) {
-            // Create a medium resolution image (max 1600x1200)
-            $image = Image::read($file) // <- use read() instead of make()
-                ->resize(1600, 1200, function ($constraint) {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                })
-                ->encode(new JpegEncoder(75)); // quality 75%
+            try {
+                $path = 'thumbnail/' . Str::uuid() . '.' . $file->getClientOriginalExtension();
 
-            $path = 'thumbnail/' . Str::uuid() . '.jpg';
+                $saved = Storage::disk('digitalocean')->put($path, file_get_contents($file), [
+                    'visibility' => 'public',
+                    'ContentType' => $file->getMimeType(),
+                ]);
 
-            $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
-                'visibility' => 'public',
-                'ContentType' => 'image/jpeg',
-            ]);
-
-            if ($saved) {
-                $saveUrl = Storage::disk('digitalocean')->url($path);
+                if ($saved) {
+                    $saveUrl = Storage::disk('digitalocean')->url($path);
+                }
+            } catch (\Exception $e) {
+                \Log::error('Thumbnail upload failed: ' . $e->getMessage());
+                return response()->json(['error' => 'Thumbnail upload failed'], 500);
             }
         }
 
@@ -165,27 +160,46 @@ class PropertyController extends Controller
         // Handle multiple image uploads
         $uploadedImages = [];
 
+        // if ($request->hasFile('multiple_image')) {
+        //     foreach ($request->file('multiple_image') as $img) {
+        //         try {
+        //             $image = Image::read($img) // use read() instead of make()
+        //                 ->resize(1600, 1200, function ($constraint) {
+        //                     $constraint->aspectRatio();
+        //                     $constraint->upsize();
+        //                 })
+        //                 ->encode(new JpegEncoder(75)); // JPEG encoder with quality 75
+
+        //             $path = 'multi-image/' . Str::uuid() . '.jpg';
+        //             $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
+        //                 'visibility' => 'public',
+        //                 'ContentType' => 'image/jpeg',
+        //             ]);
+
+        //             if ($saved) {
+        //                 $uploadedImages[] = Storage::disk('digitalocean')->url($path);
+        //             }
+        //         } catch (\Exception $e) {
+        //             \Log::error('Failed to upload image: ' . $e->getMessage());
+        //         }
+        //     }
+        // }
+
         if ($request->hasFile('multiple_image')) {
             foreach ($request->file('multiple_image') as $img) {
                 try {
-                    $image = Image::read($img) // use read() instead of make()
-                        ->resize(1600, 1200, function ($constraint) {
-                            $constraint->aspectRatio();
-                            $constraint->upsize();
-                        })
-                        ->encode(new JpegEncoder(75)); // JPEG encoder with quality 75
+                    $path = 'multi-image/' . Str::uuid() . '.' . $img->getClientOriginalExtension();
 
-                    $path = 'multi-image/' . Str::uuid() . '.jpg';
-                    $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
+                    $saved = Storage::disk('digitalocean')->put($path, file_get_contents($img), [
                         'visibility' => 'public',
-                        'ContentType' => 'image/jpeg',
+                        'ContentType' => $img->getMimeType(),
                     ]);
 
                     if ($saved) {
                         $uploadedImages[] = Storage::disk('digitalocean')->url($path);
                     }
                 } catch (\Exception $e) {
-                    \Log::error('Failed to upload image: ' . $e->getMessage());
+                    \Log::error('Multi-image upload failed: ' . $e->getMessage());
                 }
             }
         }
