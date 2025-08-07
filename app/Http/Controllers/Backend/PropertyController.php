@@ -66,10 +66,6 @@ class PropertyController extends Controller
         $saveUrl = null;
 
         try {
-            if (!$file) {
-                return response()->json(['error' => 'No image uploaded'], 400);
-            }
-
             $image = Image::read($file)
                 ->resize(1600, 1200, function ($constraint) {
                     $constraint->aspectRatio();
@@ -86,43 +82,32 @@ class PropertyController extends Controller
 
             if ($saved) {
                 $saveUrl = Storage::disk('digitalocean')->url($path);
-                return response()->json(['url' => $saveUrl], 200);
-            } else {
-                \Log::error('Thumbnail upload failed: Storage returned false');
-                return response()->json(['error' => 'Upload failed'], 500);
             }
         } catch (\Exception $e) {
-            \Log::error('Thumbnail upload exception', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            return response()->json(['error' => 'Upload failed: ' . $e->getMessage()], 500);
+            \Log::error('Thumbnail upload failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Thumbnail upload failed'], 500);
         }
 
+        if ($file) {
+            // Create a medium resolution image (max 1600x1200)
+            $image = Image::read($file) // <- use read() instead of make()
+                ->resize(1600, 1200, function ($constraint) {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                })
+                ->encode(new JpegEncoder(75)); // quality 75%
 
-        // if ($file) {
-        //     // Create a medium resolution image (max 1600x1200)
-        //     $image = Image::read($file) // <- use read() instead of make()
-        //         ->resize(1600, 1200, function ($constraint) {
-        //             $constraint->aspectRatio();
-        //             $constraint->upsize();
-        //         })
-        //         ->encode(new JpegEncoder(75)); // quality 75%
+            $path = 'thumbnail/' . Str::uuid() . '.jpg';
 
-        //     $path = 'thumbnail/' . Str::uuid() . '.jpg';
+            $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
+                'visibility' => 'public',
+                'ContentType' => 'image/jpeg',
+            ]);
 
-        //     $saved = Storage::disk('digitalocean')->put($path, (string) $image, [
-        //         'visibility' => 'public',
-        //         'ContentType' => 'image/jpeg',
-        //     ]);
-
-        //     if ($saved) {
-        //         $saveUrl = Storage::disk('digitalocean')->url($path);
-        //     }
-        // }
+            if ($saved) {
+                $saveUrl = Storage::disk('digitalocean')->url($path);
+            }
+        }
 
 
         $propertyData = [
